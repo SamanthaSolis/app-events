@@ -4,6 +4,7 @@ import './App.css';
 
 var image = <img src={logo} className="App-logo" alt="logo" />;
 
+
 class App extends Component {
   myName = "Uriel";
   render() {
