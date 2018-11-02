@@ -1,60 +1,77 @@
 import React, { Component } from 'react';
 import './Menu.css';
-import { Menu } from 'semantic-ui-react'
-import { Search } from 'semantic-ui-react'
-import { Header, Button, Popup, Grid, Icon, Input, Segment } from 'semantic-ui-react'
+import { Menu } from 'semantic-ui-react';
+import { Search } from 'semantic-ui-react';
+import {
+  Header,
+  Button,
+  Popup,
+  Grid,
+  Icon,
+  Input,
+  Segment,
+} from 'semantic-ui-react';
 
 class MenuComponent extends Component {
-  render() {
+  state = {
+    activeItem: 'home',
+  };
 
-    //const { activeItem } = this.state
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+
+  render() {
+    const { activeItem } = this.state;
 
     return (
       <Segment className="turquoise" inverted style={{ borderRadius: '0px' }}>
-        <Menu className="turquoise" inverted pointing>
-        <Menu.Item>
-          <img src='/logo.png' />
-        </Menu.Item>
-
-        <Menu.Item
-          name='features'
-          //active={activeItem === 'features'}
-          //onClick={this.handleItemClick}
+        <Menu
+          className="turquoise"
+          inverted
+          pointing
+          secondary
+          style={{ borderWidth: '0px' }}
         >
-          Features
-        </Menu.Item>
+          <Menu.Item
+            name="home"
+            active={activeItem === 'home'}
+            onClick={this.handleItemClick}
+          >
+            Home
+          </Menu.Item>
 
-        <Menu.Item
-          name='testimonials'
-          //active={activeItem === 'testimonials'}
-          //onClick={this.handleItemClick}
-        >
-          Testimonials
-        </Menu.Item>
-        <Menu.Menu position='right'>
-            <Input transparent icon inverted
+          <Menu.Item
+            name="events"
+            active={activeItem === 'events'}
+            onClick={this.handleItemClick}
+          >
+            Eventos
+          </Menu.Item>
+          <Menu.Menu position="right">
+            <Input
+              transparent
+              inverted
               style={{ marginRight: '20px', width: '250px' }}
-              placeholder='Buscar Evento...'
-              icon='search'
-              iconPosition='left'
+              placeholder="Buscar Evento..."
+              icon="search"
+              iconPosition="left"
             />
             <Popup
               trigger={
                 <Button className="turquoise" icon secondary>
                   Filtros
-                  <Icon name='angle down' />
+                  <Icon name="angle down" />
                 </Button>
               }
-              flowing hoverable
+              flowing
+              hoverable
             >
               Algo
             </Popup>
-        </Menu.Menu>
-      </Menu>
+          </Menu.Menu>
+        </Menu>
       </Segment>
-    )
+    );
   }
 }
-
 
 export default MenuComponent;
