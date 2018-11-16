@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
-import Menu from './Menu';
-import { Button, Icon, Label } from 'semantic-ui-react';
+import DatePicker from './components/DatePicker';
 import MenuComponent from './Menu';
+import EventsComponent from './Events';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
+      <div className="App" style={{ height: '100vh' }}>
         <MenuComponent />
+        <EventsComponent />
       </div>
     );
   }

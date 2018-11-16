@@ -1,29 +1,34 @@
 import React, { Component } from 'react';
 import './Menu.css';
 import { Menu } from 'semantic-ui-react';
-import { Search } from 'semantic-ui-react';
-import {
-  Header,
-  Button,
-  Popup,
-  Grid,
-  Icon,
-  Input,
-  Segment,
-} from 'semantic-ui-react';
+import DatePicker from './components/DatePicker';
+import { Button, Popup, Icon, Input, Segment } from 'semantic-ui-react';
 
 class MenuComponent extends Component {
   state = {
     activeItem: 'home',
+    date: '',
   };
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+  handleChange = (e, { name, value }) => {
+    if (this.state.hasOwnProperty(name)) {
+      this.setState({ [name]: value });
+    }
+  };
 
   render() {
-    const { activeItem } = this.state;
-
+    const { date, activeItem } = this.state;
     return (
-      <Segment className="turquoise" inverted style={{ borderRadius: '0px' }}>
+      <Segment
+        className="turquoise"
+        inverted
+        style={{
+          borderRadius: '0px',
+          padding: '5px',
+          margin: '0px',
+          height: '65px',
+        }}
+      >
         <Menu
           className="turquoise"
           inverted
@@ -32,40 +37,61 @@ class MenuComponent extends Component {
           style={{ borderWidth: '0px' }}
         >
           <Menu.Item
-            name="home"
+            name="activeItem"
+            value="home"
             active={activeItem === 'home'}
-            onClick={this.handleItemClick}
+            onClick={this.handleChange}
           >
             Home
           </Menu.Item>
 
           <Menu.Item
-            name="events"
+            name="activeItem"
+            value="events"
             active={activeItem === 'events'}
-            onClick={this.handleItemClick}
+            onClick={this.handleChange}
           >
             Eventos
           </Menu.Item>
+          <Menu.Menu position="center">
+            <img
+              src="logo.jpeg"
+              alt="logo"
+              style={{
+                height: '50px',
+                width: 'auto',
+              }}
+            />
+          </Menu.Menu>
           <Menu.Menu position="right">
             <Input
+              id="search-event"
               transparent
               inverted
-              style={{ marginRight: '20px', width: '250px' }}
               placeholder="Buscar Evento..."
               icon="search"
               iconPosition="left"
             />
             <Popup
+              wide
               trigger={
                 <Button className="turquoise" icon secondary>
                   Filtros
                   <Icon name="angle down" />
                 </Button>
               }
-              flowing
-              hoverable
+              on="click"
+              hideOnScroll
             >
-              Algo
+              <div>
+                <DatePicker
+                  name="date"
+                  title="Fecha"
+                  icon="calendar"
+                  value={date}
+                  onChange={this.handleChange}
+                />
+              </div>
             </Popup>
           </Menu.Menu>
         </Menu>
