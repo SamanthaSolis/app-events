@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import './App.css';
-import MenuComponent from './Menu';
-import EventsComponent from './Events';
+import MenuComponent from './Menu.jsx';
+import EventsComponent from './Events.jsx';
 
 /* ================================ CONFIGURATION ================================ */
+type Props = {};
+type State = {};
 
-class App extends Component {
+class App extends Component<Props, State> {
   /* ================================ DECLARATIONS ================================ */
   state = {};
 
   /* ================================ RENDER ================================ */
   render() {
     return (
-      <div className="App" style={{ height: '100vh' }}>
+      <div style={appStyle}>
         <MenuComponent />
         <EventsComponent />
       </div>
@@ -23,5 +24,9 @@ class App extends Component {
 }
 
 /* ================================ STYLES ================================ */
+var appStyle = {
+  textAlign: 'center',
+  height: '100vh',
+};
 
 export default App;

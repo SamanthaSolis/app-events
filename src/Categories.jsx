@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { List, Card, Header } from 'semantic-ui-react';
+import { addItemState, removeItemState } from './utils/StateUtil.jsx';
 
 /* ================================ CONFIGURATION ================================ */
 var categories = [
@@ -40,8 +41,9 @@ class CategoriesComponent extends Component {
   }
 
   renderCategoriesList = () => {
-    var { categories, selectedCategories } = this.state;
-    var isSelected = category => selectedCategories.includes(category);
+    var { categories } = this.state;
+    var selectCategoryClass = category =>
+      this.isSelected(category) ? categorySelectedStyle : categoryStyle;
     return (
       <List
         animated
@@ -52,7 +54,7 @@ class CategoriesComponent extends Component {
         {categories.map(category => (
           <List.Item
             key={category.name}
-            style={isSelected(category) ? categorySelectedStyle : categoryStyle}
+            style={selectCategoryClass(category)}
             onClick={() => this.selectCategory(category)}
           >
             <Header as="h4" image={category.image} content={category.name} />
@@ -64,16 +66,15 @@ class CategoriesComponent extends Component {
 
   /* ================================ LOGIC ================================ */
   selectCategory = category => {
-    var { selectedCategories } = this.state;
-    if (!selectedCategories.includes(category)) {
-      var newCategories = [...selectedCategories, category];
-      this.setState({ selectedCategories: newCategories });
+    if (this.isSelected(category)) {
+      removeItemState(this)('selectedCategories', category);
     } else {
-      var otherCategories = selectedCategories.filter(x => x !== category);
-      this.setState({
-        selectedCategories: otherCategories,
-      });
+      addItemState(this)('selectedCategories', category);
     }
+  };
+
+  isSelected = category => {
+    return this.state.selectedCategories.includes(category);
   };
 }
 

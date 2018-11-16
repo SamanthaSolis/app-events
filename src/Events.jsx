@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
 import { Grid } from 'semantic-ui-react';
-import ShowEventsComponent from './ShowEvents';
-import CategoriesComponent from './CategoriesComponent';
+import ShowEventsComponent from './ShowEvents.jsx';
+import CategoriesComponent from './Categories.jsx';
+import { httpGet } from './api/HttpRequests.jsx';
+import { Event } from './models/Event.jsx';
 
 /* ================================ CONFIGURATION ================================ */
+type Props = {};
+type State = {
+  events: Event[],
+};
 
-class EventsComponent extends Component {
+class EventsComponent extends Component<Props, State> {
   /* ================================ DECLARATIONS ================================ */
-  state = {};
+  state = {
+    events: [],
+  };
 
   /* ================================ RENDER ================================ */
   render() {
@@ -33,18 +41,11 @@ class EventsComponent extends Component {
   }
 
   async getEvents() {
-    try {
-      // TODO: Change to events.
-      const response = await fetch(`http://localhost:3001/students`);
-      if (!response.ok) {
-        throw Error(response.statusText);
-      }
-      const json = await response.json();
-      console.log(json);
-      this.setState({ events: json });
-    } catch (error) {
-      console.log(error);
+    var events: Event[] = await httpGet(`events`);
+    for (var event of events) {
+      event.place = await httpGet(`places/${event.place_id}`);
     }
+    this.setState({ events: events });
   }
 }
 
