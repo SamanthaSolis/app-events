@@ -1,19 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Grid,
-  List,
-  Card,
-  Header,
-  Image,
-  Button,
-  Popup,
-  Icon,
-  Input,
-  Segment,
-  Container,
-  Item,
-  Label,
-} from 'semantic-ui-react';
+import { Card, Item, Label } from 'semantic-ui-react';
 
 class ShowEventsComponent extends Component {
   state = {

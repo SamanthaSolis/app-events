@@ -27,6 +27,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "babel-preset-env": "^1.7.0",
     "semantic-ui": "^2.4.2"
   }
 }

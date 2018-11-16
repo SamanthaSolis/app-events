@@ -4,37 +4,26 @@ import { Menu } from 'semantic-ui-react';
 import DatePicker from './components/DatePicker';
 import { Button, Popup, Icon, Input, Segment } from 'semantic-ui-react';
 
+/* ================================ CONFIGURATION ================================ */
+
 class MenuComponent extends Component {
+  /* ================================ DECLARATIONS ================================ */
   state = {
     activeItem: 'home',
     date: '',
   };
 
-  handleChange = (e, { name, value }) => {
-    if (this.state.hasOwnProperty(name)) {
-      this.setState({ [name]: value });
-    }
-  };
-
+  /* ================================ RENDER ================================ */
   render() {
     const { date, activeItem } = this.state;
     return (
-      <Segment
-        className="turquoise"
-        inverted
-        style={{
-          borderRadius: '0px',
-          padding: '5px',
-          margin: '0px',
-          height: '65px',
-        }}
-      >
+      <Segment className="turquoise" inverted style={menuContainerStyle}>
         <Menu
           className="turquoise"
           inverted
           pointing
           secondary
-          style={{ borderWidth: '0px' }}
+          style={menuStyle}
         >
           <Menu.Item
             name="activeItem"
@@ -53,15 +42,8 @@ class MenuComponent extends Component {
           >
             Eventos
           </Menu.Item>
-          <Menu.Menu position="center">
-            <img
-              src="logo.jpeg"
-              alt="logo"
-              style={{
-                height: '50px',
-                width: 'auto',
-              }}
-            />
+          <Menu.Menu>
+            <img src="logo.jpeg" alt="logo" style={logoStyle} />
           </Menu.Menu>
           <Menu.Menu position="right">
             <Input
@@ -98,6 +80,30 @@ class MenuComponent extends Component {
       </Segment>
     );
   }
+
+  /* ================================ LOGIC ================================ */
+  handleChange = (e, { name, value }) => {
+    if (this.state.hasOwnProperty(name)) {
+      this.setState({ [name]: value });
+    }
+  };
 }
+
+/* ================================ STYLES ================================ */
+var menuContainerStyle = {
+  borderRadius: '0px',
+  padding: '5px',
+  margin: '0px',
+  height: '65px',
+};
+
+var menuStyle = {
+  borderWidth: '0px',
+};
+
+var logoStyle = {
+  height: '50px',
+  width: 'auto',
+};
 
 export default MenuComponent;

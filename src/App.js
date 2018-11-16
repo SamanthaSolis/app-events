@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
-import DatePicker from './components/DatePicker';
 import MenuComponent from './Menu';
 import EventsComponent from './Events';
 
+/* ================================ CONFIGURATION ================================ */
+
 class App extends Component {
+  /* ================================ DECLARATIONS ================================ */
+  state = {};
+
+  /* ================================ RENDER ================================ */
   render() {
     return (
       <div className="App" style={{ height: '100vh' }}>
@@ -13,6 +18,10 @@ class App extends Component {
       </div>
     );
   }
+
+  /* ================================ LOGIC ================================ */
 }
+
+/* ================================ STYLES ================================ */
 
 export default App;
