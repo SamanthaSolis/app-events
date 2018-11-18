@@ -1,58 +1,13 @@
 import React, { Component } from 'react';
 import { Card, Item, Label } from 'semantic-ui-react';
 
-class ShowEventsComponent extends Component {
-  state = {
-    allEvents: [],
+type Props = {
+  events: Event[],
+};
+type State = {};
 
-    events: [
-      {
-        name: 'Concierto',
-        date: '10/08/2018',
-        time: '2:00 PM',
-        location: {
-          name: 'Aulas 4',
-          building: 'Aulas 4',
-          floor: '4',
-          classroom: '403',
-          max_capacity: '30',
-        },
-        description: 'Estará del 1 omg',
-        poster:
-          'https://imgc.allpostersimages.com/img/print/posters/teen-wolf-official-movie-poster-print_a-G-8848874-0.jpg',
-      },
-      {
-        name: 'Conferencia',
-        date: '02/28/2018',
-        time: '10:00 PM',
-        location: {
-          name: 'Aulas 3',
-          building: 'Aulas 3',
-          floor: '1',
-          classroom: '103',
-          max_capacity: '20',
-        },
-        description: 'Estará del 2 omg',
-        poster:
-          'https://images-na.ssl-images-amazon.com/images/I/51l1Emoeq3L.jpg',
-      },
-      {
-        name: 'Concierto2',
-        date: '10/08/2018',
-        time: '2:00 PM',
-        location: {
-          name: 'Aulas 4',
-          building: 'Aulas 4',
-          floor: '4',
-          classroom: '403',
-          max_capacity: '30',
-        },
-        description: 'Estará del 1 omg',
-        poster:
-          'https://images-na.ssl-images-amazon.com/images/I/71wn3RxiwkL._SY679_.jpg',
-      },
-    ],
-  };
+class ShowEventsComponent extends Component<Props, State> {
+  state = {};
 
   handleChange = (e, { name, value }) => {
     if (this.state.hasOwnProperty(name)) {
@@ -61,6 +16,7 @@ class ShowEventsComponent extends Component {
   };
 
   render() {
+    console.log(this.props);
     return <React.Fragment>{this.renderEvents()}</React.Fragment>;
   }
 

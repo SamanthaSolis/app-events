@@ -4,6 +4,7 @@ import ShowEventsComponent from './ShowEvents.jsx';
 import CategoriesComponent from './Categories.jsx';
 import { httpGet } from './api/HttpRequests.jsx';
 import { Event } from './models/Event.jsx';
+import { dummyEvents, dummyPlaces } from './utils/DummyData.jsx';
 
 /* ================================ CONFIGURATION ================================ */
 type Props = {};
@@ -19,6 +20,7 @@ class EventsComponent extends Component<Props, State> {
 
   /* ================================ RENDER ================================ */
   render() {
+    var { events } = this.state;
     return (
       <div style={eventsContainerStyles}>
         <Grid divided="vertically">
@@ -27,7 +29,7 @@ class EventsComponent extends Component<Props, State> {
               <CategoriesComponent />
             </Grid.Column>
             <Grid.Column width={11}>
-              <ShowEventsComponent />
+              <ShowEventsComponent events={events} />
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -41,10 +43,7 @@ class EventsComponent extends Component<Props, State> {
   }
 
   async getEvents() {
-    var events: Event[] = await httpGet(`events`);
-    for (var event of events) {
-      event.place = await httpGet(`places/${event.place_id}`);
-    }
+    var events: Event[] = (await httpGet(`events`)) || dummyEvents;
     this.setState({ events: events });
   }
 }
