@@ -4,7 +4,7 @@ import ShowEventsComponent from './ShowEvents.jsx';
 import CategoriesComponent from './Categories.jsx';
 import { httpGet } from './api/HttpRequests.jsx';
 import { Event } from './models/Event.jsx';
-import { dummyEvents, dummyPlaces } from './utils/DummyData.jsx';
+import { dummyEvents } from './utils/DummyData.jsx';
 
 /* ================================ CONFIGURATION ================================ */
 type Props = {};
