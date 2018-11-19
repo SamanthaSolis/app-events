@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 import { Menu } from 'semantic-ui-react';
 import DatePicker from './components/DatePicker.jsx';
-import { Button, Popup, Icon, Input, Segment } from 'semantic-ui-react';
+import { Button, Popup, Icon, Input, Segment,Grid, Image,Sidebar,Header } from 'semantic-ui-react';
 import { handleChange } from './utils/StateUtil.jsx';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 /* ================================ CONFIGURATION ================================ */
+type Props = {
+};
+type State = {
+  date: string
+};
 
-class MenuComponent extends Component {
+class MenuComponent extends Component<Props, State> {
   /* ================================ DECLARATIONS ================================ */
   state = {
-    activeItem: 'home',
     date: '',
   };
 
@@ -26,25 +31,18 @@ class MenuComponent extends Component {
           style={menuStyle}
         >
           <Menu.Item
-            name="activeItem"
-            value="home"
-            active={activeItem === 'home'}
-            onClick={handleChange(this)}
+            onClick={this.props.handleSidebar}
           >
-            Home
+           <Icon name="user" />
           </Menu.Item>
 
           <Menu.Item
-            name="activeItem"
-            value="events"
-            active={activeItem === 'events'}
-            onClick={handleChange(this)}
+            as={Link}
+            to="/events"
+            style={{ padding: '0px' }}
           >
-            Eventos
+            <Image src="logo.jpg" alt="logo" style={logoStyle} />
           </Menu.Item>
-          <Menu.Menu>
-            <img src="logo.jpeg" alt="logo" style={logoStyle} />
-          </Menu.Menu>
           <Menu.Menu position="right">
             <Input
               style={searchEventStyle}
@@ -104,6 +102,8 @@ var searchEventStyle = {
 var logoStyle = {
   height: '50px',
   width: 'auto',
+  padding: '0px',
+  margin: '0px',
 };
 
 export default MenuComponent;

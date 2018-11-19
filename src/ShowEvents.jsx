@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Item, Label } from 'semantic-ui-react';
+import { Card, Item, Label, Image, ItemContent, GridRow, GridColumn, Grid } from 'semantic-ui-react';
 
 type Props = {
   events: Event[],
@@ -16,31 +16,62 @@ class ShowEventsComponent extends Component<Props, State> {
   };
 
   render() {
+
     console.log(this.props);
-    return <React.Fragment>{this.renderEvents()}</React.Fragment>;
+    /*return ( <Grid padded>
+    {this.props.events.map(event => (
+      <Grid.Row key={event}>
+        <Grid.Column>{this.renderEvent(event)}</Grid.Column>
+      </Grid.Row>
+    ))}
+    </Grid> )*/
+    return <div> {this.props.events.map(event => (this.renderEvent(event)))} </div>;
+
   }
 
-  renderEvents = () => {
+  renderEvent = (event) => {
     var paragraph = 'lolololo';
+    console.log(event);
     return (
-      <Card>
+      <Card style={{width:"90%", float:"right", margin:"10px"}}>
         <Card.Content>
           <Item>
-            <Item.Image
-              height="200"
-              src="https://images-na.ssl-images-amazon.com/images/I/71wn3RxiwkL._SY679_.jpg"
-            />
-
             <Item.Content>
-              <Item.Header as="a">12 Years a Slave</Item.Header>
-              <Item.Meta>
-                <span className="cinema">Union Square 14</span>
-              </Item.Meta>
-              <Item.Description>{paragraph}</Item.Description>
-              <Item.Extra>
-                <Label>IMAX</Label>
-                <Label icon="globe" content="Additional Languages" />
-              </Item.Extra>
+              <Grid>
+                <GridRow>
+                  <Grid.Column width={8}>
+                    <Image src={event.poster} size='small'/>
+                  </Grid.Column>
+                  <Grid.Column width={8}>
+                      <Item.Header as="a"><h3>{event.name}</h3></Item.Header>
+                      <Item.Meta>
+                        <span className="cinema"><p><b>LUGAR: </b>{event.place.name}</p></span>
+                        <span className="cinema"><b>FECHA: </b>
+                        {new Intl.DateTimeFormat('en-GB', { 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: '2-digit',
+                        }).format(event.datetime)}
+                        </span>
+                        <span className="cinema"><p><b>HORA: </b>
+                        {new Intl.DateTimeFormat('en-GB', { 
+                          minute: 'numeric', 
+                          hour: 'numeric' 
+                        }).format(event.datetime)}</p> 
+                        </span>
+                      </Item.Meta>
+                      <Item.Extra>
+                        <Label>TAG</Label>
+                        <Label>TAG</Label>
+                      </Item.Extra>
+
+                      <Item.Description>
+                      <p>{event.description}</p>
+                      </Item.Description>
+
+                  </Grid.Column>
+                </GridRow>
+              </Grid>
             </Item.Content>
           </Item>
         </Card.Content>
@@ -49,14 +80,9 @@ class ShowEventsComponent extends Component<Props, State> {
   };
 }
 
-/*
-const extra = (
-  <a>
-    <Icon name='user' />
-    16 Friends
-  </a>
-)
 
+
+/*
 const CardExampleCardProps = () => (
   <Card
     image='/images/avatar/large/elliot.jpg'

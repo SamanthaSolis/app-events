@@ -28,7 +28,9 @@ class EventsComponent extends Component<Props, State> {
             <Grid.Column width={5} textAlign="left">
               <CategoriesComponent />
             </Grid.Column>
-            <Grid.Column width={11}>
+            <Grid.Column width={1}>
+            </Grid.Column>
+            <Grid.Column width={10}>
               <ShowEventsComponent events={events} />
             </Grid.Column>
           </Grid.Row>
@@ -46,11 +48,13 @@ class EventsComponent extends Component<Props, State> {
     var events: Event[] = (await httpGet(`events`)) || dummyEvents;
     this.setState({ events: events });
   }
+
+
 }
 
 /* ================================ STYLES ================================ */
 var eventsContainerStyles = {
-  width: '80%',
+  width: '70%',
   margin: '0px auto',
   background: '#F7F8FA',
   minHeight: 'calc(100% - 65px)',
