@@ -7,7 +7,7 @@ type Student = {
     password: string,
     semester: number,
     degree: string,
-    groups: StudentGroup[],
+    studentGroups: StudentGroup,
 
   };
   

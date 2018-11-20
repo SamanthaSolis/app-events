@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
 import { Grid, Form, Checkbox, Button, Card, Item, Select } from 'semantic-ui-react';
+import { Event } from './models/Event.jsx';
+import { Place } from './models/Place.jsx';
+import { handleChange } from './utils/StateUtil.jsx';
+import { httpPost } from './api/HttpRequests.jsx';
 
 /* ================================ CONFIGURATION ================================ */
 type Props = {};
-type State = {};
+type State = {
+  name: string,
+  description: string,
+  place: Place,
+};
 
 var areas = [
   { text: 'Tecnologia', value: 'tecnologia' },
@@ -13,48 +21,91 @@ var areas = [
 class CreateEventComponent extends Component<Props, State> {
   /* ================================ DECLARATIONS ================================ */
   state = {
+    event: {},
+    place: {},
   };
 
   /* ================================ RENDER ================================ */
   render() {
+    var { event, place } = this.state;
     return (
       <div style={eventsContainerStyles}>
         <Card style={{ width: '100%' }}>
           <Card.Content>
             <Item>
               <Item.Content>
-                <Form>
+                <Form onSubmit={this.handleSubmit}>
                   <h1>Crear Evento</h1>
-                  <Form.Field>
-                    <label>Nombre del Evento</label>
-                    <input placeholder='Mi primer evento' />
-                  </Form.Field>
+                  <Form.Input
+                    name='name'
+                    label='Nombre del Evento'
+                    control='input'
+                    placeholder='Mi primer evento'
+                    value={event.name}
+                    onChange={this.handleChangeEvent}
+                  />
                   <Form.TextArea
+                    name='description'
                     label='Descripción'
                     placeholder='Platicanos más acerca del evento...'
+                    value={event.description}
+                    onChange={this.handleChangeEvent}
                   />
                   <Form.Field
+                    name='area'
                     control={Select}
                     options={areas}
                     label={{ children: 'Area', htmlFor: 'form-select-control-area' }}
                     placeholder='Selecciona un area...'
                     search
                     searchInput={{ id: 'form-select-control-area' }}
+                    value={event.area}
+                    onChange={this.handleChangeEvent}
                   />
                   <Form.Group unstackable widths={3}>
-                    <Form.Input label='Edificio' placeholder='CIAP' />
-                    <Form.Input label='Piso' placeholder='3' />
-                    <Form.Input label='Salon' placeholder='304' />
+                    <Form.Input
+                      name='building'
+                      label='Edificio'
+                      placeholder='CIAP'
+                      value={place.building}
+                      onChange={this.handleChangePlace}
+                    />
+                    <Form.Input
+                      name='floor'
+                      label='Piso'
+                      placeholder='3'
+                      value={place.floor}
+                      onChange={this.handleChangePlace}
+                    />
+                    <Form.Input
+                      name='classroom'
+                      label='Salón'
+                      placeholder='304'
+                      value={place.classroom}
+                      onChange={this.handleChangePlace}
+                    />
                   </Form.Group>
-                  <Form.Field>
-                    <label>Capacidad Necesaria</label>
-                    <input type='number' max={10} />
-                  </Form.Field>
+                  <Form.Input
+                    name='max_capacity'
+                    label='Capacidad Necesaria'
+                    type='number'
+                    max={10}
+                    placeholder='304'
+                    value={event.max_capacity}
+                    onChange={this.handleChangeEvent}
+                  />
                   <Form.Field>
                     <label>Poster</label>
                     <Button>Cargar</Button>
                   </Form.Field>
-                  <Button type='submit'>Submit</Button>
+                  <Form.Input
+                    name='tags'
+                    label='Tags'
+                    placeholder='Quimica, Tecnología, ...'
+                    value={event.tags}
+                    onChange={this.handleChangeEvent}
+                  />
+                  <Button type='submit'>Crear</Button>
                 </Form>
               </Item.Content>
             </Item>
@@ -65,6 +116,22 @@ class CreateEventComponent extends Component<Props, State> {
   }
 
   /* ================================ LOGIC ================================ */
+  handleSubmit = () => {
+    this.createEvent();
+  }
+
+  handleChangeEvent = (e, { name, value }) => {
+    this.setState({ event: { ...this.state.event, [name]: value } });
+  }
+
+  async createEvent() {
+    var newEvent = await httpPost(`events`, this.event);
+    console.log(newEvent);
+  }
+
+  handleChangePlace = (e, { name, value }) => {
+    this.setState({ place: { ...this.state.place, [name]: value } });
+  }
 }
 
 /* ================================ STYLES ================================ */

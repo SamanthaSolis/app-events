@@ -8,4 +8,3 @@ type StudentGroup[ent = {
   };
   
   export { StudentGroup };
-  

@@ -45,7 +45,8 @@ class ShowEventsComponent extends Component<Props, State> {
                   <Grid.Column width={8}>
                       <Item.Header as="a"><h3>{event.name}</h3></Item.Header>
                       <Item.Meta>
-                        <span className="cinema"><p><b>LUGAR: </b>{event.place.name}</p></span>
+                        <div style={{display:"grid"}}>
+                        <span className="cinema"><b>LUGAR: </b>{event.place.name}</span>
                         <span className="cinema"><b>FECHA: </b>
                         {new Intl.DateTimeFormat('en-GB', { 
                           year: 'numeric', 
@@ -53,12 +54,13 @@ class ShowEventsComponent extends Component<Props, State> {
                           day: '2-digit',
                         }).format(event.datetime)}
                         </span>
-                        <span className="cinema"><p><b>HORA: </b>
+                        <span className="cinema"><b>HORA: </b>
                         {new Intl.DateTimeFormat('en-GB', { 
                           minute: 'numeric', 
                           hour: 'numeric' 
-                        }).format(event.datetime)}</p> 
+                        }).format(event.datetime)}
                         </span>
+                        </div>
                       </Item.Meta>
                       <Item.Extra>
                         <Label>TAG</Label>

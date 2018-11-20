@@ -95,7 +95,6 @@ class App extends Component<Props, State> {
 
 /* ================================ STYLES ================================ */
 var appStyle = {
-  textAlign: 'center',
   height: '100vh',
 };
 
