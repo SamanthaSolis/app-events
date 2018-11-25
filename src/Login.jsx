@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { httpPost } from './api/HttpRequests';
 
 export class Login extends React.Component {
   render() {
@@ -18,8 +19,8 @@ export class Login extends React.Component {
   handleSignin = e => {
     e.preventDefault();
     let that = this;
-    axios
-      .post(`localhost:3001/sessions`, {
+    
+    httpPost(`sessions`, {
         email: document.getElementById('email').value,
         password: document.getElementById('password').value,
       })
