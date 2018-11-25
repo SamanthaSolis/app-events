@@ -1,16 +1,37 @@
 import React from 'react';
 import axios from 'axios';
 import { httpPost } from './api/HttpRequests';
+import { handleChange } from './utils/StateUtil';
+
 
 export class Login extends React.Component {
+  state = {
+    email: '',
+    password: '',
+  };
+
   render() {
+    const { email, password } = this.state;
     return (
       <div>
         <h2>Log In</h2>
         <form>
-          <input id="email" placeholder="email" />
-          <input id="password" placeholder="password" />
-          <button onClick={this.handleSignin}>Log In</button>
+          <input
+            name="email"
+            placeholder="Email"
+            value={email}
+            onChange={handleChange(this)}
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={handleChange(this)}
+          />
+          <button onClick={this.handleSignin}>
+            Log In
+          </button>
         </form>
       </div>
     );
@@ -18,18 +39,17 @@ export class Login extends React.Component {
 
   handleSignin = e => {
     e.preventDefault();
-    let that = this;
-    
+    const { email, password } = this.state;
+
     httpPost(`sessions`, {
-        email: document.getElementById('email').value,
-        password: document.getElementById('password').value,
+      email: email,
+      password: password,
+    })
+      .then((response) => {
+        this.props.changePage('delete');
+        this.props.updateCurrentUser(email);
       })
-      .then(function(response) {
-        console.log('YAAAY FUNCIONO!!!');
-        that.props.changePage('delete');
-        //that.props.updateCurrentUser(email);
-      })
-      .catch(function(error) {
+      .catch((error) => {
         console.log(error);
       });
   };
