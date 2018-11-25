@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { Grid } from 'semantic-ui-react';
-import ShowEventsComponent from './ShowEvents.jsx';
-import CategoriesComponent from './Categories.jsx';
+import Event from './models/Event.jsx';
+import EventComponent from './EventComponent.jsx';
 import { httpGet } from './api/HttpRequests.jsx';
-import { Event } from './models/Event.jsx';
 import { dummyEvents } from './utils/DummyData.jsx';
 
 /* ================================ CONFIGURATION ================================ */
@@ -12,7 +10,7 @@ type State = {
   events: Event[],
 };
 
-class EventsComponent extends Component<Props, State> {
+class MyEventsComponent extends Component<Props, State> {
   /* ================================ DECLARATIONS ================================ */
   state = {
     events: [],
@@ -23,17 +21,9 @@ class EventsComponent extends Component<Props, State> {
     var { events } = this.state;
     return (
       <div style={eventsContainerStyles}>
-        <Grid divided="vertically">
-          <Grid.Row columns={2}>
-            <Grid.Column width={5} textAlign="left">
-              <CategoriesComponent />
-            </Grid.Column>
-            <Grid.Column width={1} />
-            <Grid.Column width={10}>
-              <ShowEventsComponent events={events} />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+        {events.map(event => (
+          <EventComponent event={event} />
+        ))}
       </div>
     );
   }
@@ -50,6 +40,7 @@ class EventsComponent extends Component<Props, State> {
 }
 
 /* ================================ STYLES ================================ */
+
 var eventsContainerStyles = {
   width: '70%',
   margin: '0px auto',
@@ -57,4 +48,4 @@ var eventsContainerStyles = {
   minHeight: 'calc(100% - 65px)',
 };
 
-export default EventsComponent;
+export default MyEventsComponent;

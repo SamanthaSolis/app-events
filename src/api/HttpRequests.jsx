@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 var baseUrl = `http://localhost:3001`;
 var httpGet = async endpoint => {
   try {
@@ -13,18 +15,17 @@ var httpGet = async endpoint => {
   }
 };
 
-var httpPost = async (endpoint, obj) => {
+var httpPost = async (endpoint, data) => {
   try {
-    const response = await fetch(`${baseUrl}/${endpoint}`, {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: obj
+    const response = await axios.post(`${baseUrl}/${endpoint}`, data, {
+      timeout: 10000,
+      withCredentials: false,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
     });
-    if (!response.ok) {
-      throw Error(response.statusText);
-    }
-    const data = await response.json();
-    return data;
+    return await response.data;
   } catch (error) {
     console.log(error);
     return null;
