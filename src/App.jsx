@@ -7,6 +7,8 @@ import MyEventsComponent from './MyEvents.jsx';
 import RegisteredEventsComponent from './RegisteredEvents.jsx';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { Button, Icon, Menu, Sidebar } from 'semantic-ui-react';
+import axios from 'axios';
+import { Header } from './Header';
 
 /* ================================ CONFIGURATION ================================ */
 type Props = {};
@@ -18,6 +20,7 @@ class App extends Component<Props, State> {
   /* ================================ DECLARATIONS ================================ */
   state = {
     isVisible: false,
+    currentUser: null,
   };
 
   /* ================================ RENDER ================================ */
@@ -61,6 +64,7 @@ class App extends Component<Props, State> {
               </Menu.Item>
             </Sidebar>
             <Sidebar.Pusher dimmed={isVisible}>
+              <Header updateCurrentUser={this.updateCurrentUser} />
               <MenuComponent handleSidebar={this.changeVisibility} />
               <Route path="/" exact component={EventsComponent} />
               <Route path="/events/" component={EventsComponent} />
@@ -86,6 +90,33 @@ class App extends Component<Props, State> {
   handleItemClick = (e, { name }) => {
     this.setState({ currentView: name });
   };
+
+  componentDidMount() {
+    let that = this;
+    console.log(axios);
+    axios
+      .get('/users/check_for_user', {})
+      .then(function(response) {
+        if (response.data.email) {
+          that.setState({
+            currentUser: response.data.email,
+          });
+        } else {
+          that.setState({
+            currentUser: null,
+          });
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
+
+  updateCurrentUser(email) {
+    this.setState({
+      currentUser: email,
+    });
+  }
 }
 
 /* ================================ STYLES ================================ */
