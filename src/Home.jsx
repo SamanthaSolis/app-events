@@ -27,6 +27,7 @@ class Home extends Component<Props, State> {
   render() {
     const { isVisible } = this.state;
     return (
+      <Router>
       <div style={appStyle}>
         <Sidebar.Pushable>
           <Sidebar
@@ -77,6 +78,7 @@ class Home extends Component<Props, State> {
           </Sidebar.Pusher>
         </Sidebar.Pushable>
       </div>
+      </Router>
     );
   }
 
