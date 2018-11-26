@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 var baseUrl = `http://localhost:3001`;
-var httpGet = async endpoint => {
+var httpGet = async (endpoint, requestData) => {
   try {
-    const response = await fetch(`${baseUrl}/${endpoint}`);
+    const response = await fetch(`${baseUrl}/${endpoint}`, requestData || {});
     if (!response.ok) {
       throw Error(response.statusText);
     }

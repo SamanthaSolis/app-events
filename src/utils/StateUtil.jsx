@@ -1,5 +1,7 @@
-var handleChange = self => (e, { name, value }) => {
-  changeState(self)(name, value);
+var handleChange = self => (e, data) => {
+  if(data) {
+    changeState(self)(data.name, data.value);
+  }
 };
 
 var changeState = self => (name, value) => {
