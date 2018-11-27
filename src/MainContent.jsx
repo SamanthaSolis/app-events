@@ -5,10 +5,16 @@ import ProfileComponent from './Profile.jsx';
 import CreateEventComponent from './CreateEvent.jsx';
 import MyEventsComponent from './MyEvents.jsx';
 import RegisteredEventsComponent from './RegisteredEvents.jsx';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Redirect,
+} from 'react-router-dom';
 import { Button, Icon, Menu, Sidebar } from 'semantic-ui-react';
 import axios from 'axios';
 import { Login } from './Login';
+import Cookies from 'universal-cookie';
 
 /* ================================ CONFIGURATION ================================ */
 type Props = {};
@@ -18,9 +24,7 @@ type State = {
 //<Header updateCurrentUser={this.updateCurrentUser} />
 export default class MainContent extends Component<Props, State> {
   /* ================================ DECLARATIONS ================================ */
-  state = {
-    isVisible: false
-  };
+  state = { isVisible: false };
 
   /* ================================ RENDER ================================ */
   render() {
@@ -51,14 +55,19 @@ export default class MainContent extends Component<Props, State> {
               to="/create-event"
             >
               Crear Evento
-          </Button>
+            </Button>
           </Menu.Item>
           <Menu.Item as={Link} to="/registered-events">
             Eventos Registrados
-        </Menu.Item>
+          </Menu.Item>
           <Menu.Item as={Link} to="/my-events">
             Mis Eventos
-        </Menu.Item>
+          </Menu.Item>
+          <Menu.Menu>
+            <Menu.Item as="a" onClick={this.logout}>
+              Log Out
+            </Menu.Item>
+          </Menu.Menu>
         </Sidebar>
         <Sidebar.Pusher dimmed={isVisible}>
           <MenuComponent handleSidebar={this.changeVisibility} />
@@ -78,11 +87,20 @@ export default class MainContent extends Component<Props, State> {
 
   /* ================================ LOGIC ================================ */
   changeVisibility = () => {
-    this.setState({ isVisible: !this.state.isVisible });
+    this.setState({
+      isVisible: !this.state.isVisible,
+    });
   };
-
   handleItemClick = (e, { name }) => {
     this.setState({ currentView: name });
+  };
+  logout = () => {
+    const cookies = new Cookies();
+    cookies.set('email', '', { path: '/' });
+    cookies.set('authentication_token', '', {
+      path: '/',
+    });
+    this.props.history.push('/login');
   };
 }
 

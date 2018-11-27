@@ -1,10 +1,8 @@
 import React from 'react';
-import axios from 'axios';
 import { httpPost } from './api/HttpRequests';
-import { handleChange } from './utils/StateUtil';
 import Cookies from 'universal-cookie';
-import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
-
+import { Form, Button, Card, Image, Divider } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 export class Login extends React.Component {
   state = {
@@ -16,38 +14,60 @@ export class Login extends React.Component {
   render() {
     const { email, password, isAuth } = this.state;
     if (isAuth === true) {
-      return <Redirect to='/events' />
+      this.props.history.push('/events');
     }
 
     return (
-      <div>
-        <h2>Log In</h2>
-        <form>
-          <input
-            placeholder="Email"
-            value={email}
-            onChange={this.changeEmail}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={this.changePassword}
-          />
-          <button onClick={this.handleSignin}>
-            Log In
-          </button>
-        </form>
+      <div style={loginContainerStyles}>
+        <div style={loginContentStyles}>
+          <Image src="./logo.jpg" height="80" style={{ margin: '10px auto' }} />
+          <Card style={loginCardStyles}>
+            <Form>
+              <Form.Field>
+                <label>Email</label>
+                <input
+                  placeholder="example@gmail.com"
+                  value={email}
+                  onChange={this.changeEmail}
+                />
+              </Form.Field>
+              <Form.Field>
+                <label>Password</label>
+                <input
+                  type="password"
+                  placeholder=""
+                  value={password}
+                  onChange={this.changePassword}
+                />
+              </Form.Field>
+              <div align="center">
+                <Button
+                  fluid
+                  type="submit"
+                  color="primary"
+                  size="large"
+                  onClick={this.handleSignin}
+                >
+                  Log In
+                </Button>
+              </div>
+            </Form>
+            <Divider horizontal>Or</Divider>
+            <Button as={Link} fluid color="secondary" size="large" to="/signup">
+              Sign Up
+            </Button>
+          </Card>
+        </div>
       </div>
     );
   }
 
-  changePassword = (e) => {
+  changePassword = e => {
     this.setState({ password: e.target.value });
-  }
-  changeEmail = (e) => {
+  };
+  changeEmail = e => {
     this.setState({ email: e.target.value });
-  }
+  };
 
   handleSignin = e => {
     e.preventDefault();
@@ -60,14 +80,34 @@ export class Login extends React.Component {
       email: email,
       password: password,
     })
-      .then((response) => {
+      .then(response => {
         const cookies = new Cookies();
         cookies.set('email', response.email, { path: '/' });
-        cookies.set('authentication_token', response.authentication_token, { path: '/' });
+        cookies.set('authentication_token', response.authentication_token, {
+          path: '/',
+        });
         this.setState({ isAuth: true });
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   }
 }
+
+/* ================================ STYLES ================================ */
+const loginContainerStyles = {
+  width: '100%',
+  margin: 'auto',
+  background: '#F7F8FA',
+  minHeight: '100vh',
+  display: 'grid',
+};
+const loginContentStyles = {
+  margin: 'auto',
+  width: '450px',
+};
+const loginCardStyles = {
+  width: '100%',
+  textAlign: 'left',
+  padding: '15px',
+};

@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import Home from './Home';
-import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Switch,
+  Redirect,
+} from 'react-router-dom';
 import { Admin, Resource, ListGuesser, fetchUtils } from 'react-admin';
 import jsonServerProvider from 'ra-data-json-server';
 import HomeAdmin from './HomeAdmin';
@@ -13,13 +19,12 @@ import MainContent from './MainContent';
 /* ================================ CONFIGURATION ================================ */
 
 type Props = {};
-type State = {
-};
+type State = {};
 
 class App extends Component<Props, State> {
   /* ================================ DECLARATIONS ================================ */
   state = {
-    isAuth: undefined
+    isAuth: undefined,
   };
 
   /* ================================ RENDER ================================ */
@@ -32,20 +37,9 @@ class App extends Component<Props, State> {
             <Switch>
               <Route exact path="/login" component={Login} />
               <Route exact path="/signup" component={Signup} />
-              {isAuth &&
-                <Route path="/admin" component={HomeAdmin} />
-              }
-              {isAuth &&
-                <Route path="/" component={MainContent} />
-              }
-              {isAuth === false &&
-                <Redirect
-                  to={{
-                    pathname: "/login",
-                    state: { from: this.props.location }
-                  }}
-                />
-              }
+              {isAuth && <Route path="/admin" component={HomeAdmin} />}
+              {isAuth && <Route path="/" component={MainContent} />}
+              {isAuth === false && <Redirect to="/login" />}
             </Switch>
           </div>
         </Router>

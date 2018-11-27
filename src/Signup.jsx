@@ -1,47 +1,112 @@
 import React from 'react';
-import axios from 'axios';
+import { httpGet } from './api/HttpRequests';
+import Cookies from 'universal-cookie';
+import { Form, Button, Card, Image } from 'semantic-ui-react';
+import { Redirect, Link } from 'react-router-dom';
 
 export class Signup extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleSignup = this.handleSignup.bind(this);
-  }
+  state = { email: '', password: '' };
 
-  handleSignup(e) {
+  handleSignup = e => {
     e.preventDefault();
-    let that = this;
-    axios
-      .post('/users', {
-        user: {
-          email: document.getElementById('email').value,
-          password: document.getElementById('password').value,
-          password_confirmation: document.getElementById(
-            'password_confirmation',
-          ).value,
-        },
+    this.signUp();
+  };
+
+  signUp = (email, password) => {
+    httpGet(`sessions`, {
+      user: {
+        email: email,
+        password: password,
+        password_confirmation: password,
+      },
+    })
+      .then(response => {
+        const cookies = new Cookies();
+        cookies.set('email', response.email, { path: '/' });
+        cookies.set('authentication_token', response.authentication_token, {
+          path: '/',
+        });
+        this.setState({ isAuth: true });
       })
-      .then(function(response) {
-        that.props.changePage('delete');
-        //that.props.updateCurrentUser(email);
-      })
-      .catch(function(error) {
+      .catch(error => {
         console.log(error);
       });
-  }
+  };
+
   render() {
+    const { email, password } = this.state;
     return (
-      <div>
-        <h2>Signup</h2>
-        <form>
-          <input id="email" placeholder="email" />
-          <input id="password" placeholder="password" />
-          <input id="password_confirmation" placeholder="retype password" />
-          <button onClick={this.handleSignup}>Submit</button>
-        </form>
-        <button onClick={() => this.props.changePage('login')}>
-          Back to Login
-        </button>
+      <div style={signupContainerStyles}>
+        <Card style={signupCardStyles}>
+          <div>
+            <Button
+              as={Link}
+              floated="left"
+              size="mini"
+              circular
+              icon="arrow left"
+              to="/login"
+              style={{ position: 'absolute' }}
+            />
+            <h1 align="center" style={{ marginBottom: '20px' }}>
+              Register
+            </h1>
+          </div>
+          <Form>
+            <Form.Field>
+              <label>Email</label>
+              <input
+                placeholder="example@gmail.com"
+                value={email}
+                onChange={this.changeEmail}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Password</label>
+              <input
+                type="password"
+                placeholder=""
+                value={password}
+                onChange={this.changePassword}
+              />
+            </Form.Field>
+            <Button
+              fluid
+              type="submit"
+              color="primary"
+              size="large"
+              onClick={this.handleSignup}
+            >
+              Register
+            </Button>
+          </Form>
+        </Card>
       </div>
     );
   }
+
+  changePassword = e => {
+    this.setState({ password: e.target.value });
+  };
+  changeEmail = e => {
+    this.setState({ email: e.target.value });
+  };
+  handleSignup = e => {
+    this.props.history.push('/events');
+  };
 }
+
+/* ================================ STYLES ================================ */
+const signupContainerStyles = {
+  width: '100%',
+  margin: '0px auto',
+  background: '#F7F8FA',
+  minHeight: '100vh',
+  display: 'grid',
+};
+const signupCardStyles = {
+  textAlign: 'left',
+  margin: '20px auto',
+  padding: '15px',
+  width: '450px',
+};
