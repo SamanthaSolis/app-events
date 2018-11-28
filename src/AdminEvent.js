@@ -3,6 +3,7 @@ import {
   List,
   Create,
   Edit,
+  Filter,
   Datagrid,
   TextField,
   DateField,
@@ -19,9 +20,21 @@ import {
   DisabledInput,
 } from 'react-admin';
 
+
+const PostFilter = (props) => (
+  <Filter {...props}>
+      <TextInput label="Search" source="q" alwaysOn />
+      <ReferenceInput label="Event" source="name" reference="name" allowEmpty>
+          <SelectInput optionText="name" />
+      </ReferenceInput>
+  </Filter>
+);
+
+
+
 export const EventList = props => (
-  <List {...props}>
-    <Datagrid>
+  <List {...props} filters={<PostFilter />}>
+    <Datagrid rowClick="edit">
       <TextField source="id" />
       <TextField source="name" />
       <DateField source="time" />
@@ -35,8 +48,7 @@ export const EventList = props => (
       <NumberField source="price" />
       <TextField source="contact" />
       <TextField source="areas" />
-      <DateField source="created_at" />
-      <DateField source="updated_at" />
+
       <EditButton />
     </Datagrid>
   </List>
@@ -58,9 +70,6 @@ export const EventEdit = props => (
       <NumberInput source="price" />
       <TextInput source="contact" />
       <TextInput source="areas" />
-      <DateInput source="created_at" />
-      <DateInput source="updated_at" />
-      <NumberInput source="place.id" />
     </SimpleForm>
   </Edit>
 );

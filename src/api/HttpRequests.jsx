@@ -18,7 +18,9 @@ const httpGet = async (endpoint, params, requiresAuth = true) => {
     });
     if (!response.ok) {
       throw Error(response.statusText);
+      
     }
+    console.log(response);
     const data = await response.json();
     return data;
   } catch (error) {

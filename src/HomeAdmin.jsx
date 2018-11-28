@@ -10,6 +10,7 @@ import { EmployeeList, EmployeeEdit, EmployeeCreate } from './AdminEmployee';
 import { Student_groupList, Student_groupEdit, Student_groupCreate } from './AdminStudentGroup';
 import { ReservationList, ReservationEdit, ReservationCreate } from './AdminReservation';
 import { RegisterList, RegisterEdit, RegisterCreate } from './AdminRegister';
+import { Filter,ReferenceInput, SelectInput, TextInput } from 'react-admin';
 
 
 /* ================================ CONFIGURATION ================================ */
@@ -37,6 +38,8 @@ class HomeAdmin extends Component<Props, State> {
   /* ================================ RENDER ================================ */
   render() {
     return (
+
+
       <Admin dataProvider={dataProvider}>
         <Resource
           name="events"
@@ -85,5 +88,7 @@ class HomeAdmin extends Component<Props, State> {
 }
 
 /* ================================ STYLES ================================ */
+
+
 
 export default HomeAdmin;
