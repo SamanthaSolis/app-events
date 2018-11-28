@@ -16,13 +16,8 @@ const httpGet = async (endpoint, params, requiresAuth = true) => {
       headers: headers,
       withCredentials: false,
     });
-    if (!response.ok) {
-      throw Error(response.statusText);
-      
-    }
-    console.log(response);
-    const data = await response.json();
-    return data;
+    return response.data;
+
   } catch (error) {
     console.log(error);
     return null;
@@ -44,7 +39,7 @@ const httpPost = async (endpoint, data, requiresAuth = true) => {
       headers: headers,
       withCredentials: false,
     });
-    return await response.data;
+    return response.data;
   } catch (error) {
     console.log(error);
     return null;
@@ -66,7 +61,7 @@ const httpPut = async (endpoint, data, requiresAuth = true) => {
       headers: headers,
       withCredentials: false,
     });
-    return await response.data;
+    return response.data;
   } catch (error) {
     console.log(error);
     return null;
