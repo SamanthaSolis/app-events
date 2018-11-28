@@ -38,10 +38,12 @@ export const EventList = props => (
       <TextField source="id" />
       <TextField source="name" />
       <DateField source="time" />
+      <ReferenceField source="user_id" reference="users">
+        <TextField source="email" />
+      </ReferenceField>
       <ReferenceField source="place_id" reference="places">
         <TextField source="building" />
       </ReferenceField>
-      <TextField source="description" />
       <TextField source="poster.url" />
       <TextField source="tags" />
       <NumberField source="max_capacity" />
@@ -60,6 +62,9 @@ export const EventEdit = props => (
       <DisabledInput source="id" />
       <TextInput source="name" />
       <DateInput source="time" />
+      <ReferenceInput source="user_id" reference="users">
+        <SelectInput optionText="mail" />
+      </ReferenceInput>
       <ReferenceInput source="place_id" reference="places">
         <SelectInput optionText="building" />
       </ReferenceInput>
@@ -80,6 +85,9 @@ export const EventCreate = props => (
       <DisabledInput source="id" />
       <TextInput source="name" />
       <DateInput source="time" />
+      <ReferenceInput source="user_id" reference="users">
+        <SelectInput optionText="mail" />
+      </ReferenceInput>
       <ReferenceInput source="place_id" reference="places">
         <SelectInput optionText="building" />
       </ReferenceInput>

@@ -24,6 +24,7 @@ import {
   ReservationCreate,
 } from './AdminReservation';
 import { RegisterList, RegisterEdit, RegisterCreate } from './AdminRegister';
+import { UserList, UserEdit } from './AdminUser';
 import { Filter, ReferenceInput, SelectInput, TextInput } from 'react-admin';
 
 /* ================================ CONFIGURATION ================================ */
@@ -59,6 +60,7 @@ class HomeAdmin extends Component<Props, State> {
         }}
       >
         <Admin dataProvider={dataProvider}>
+
           <Resource
             name="events"
             list={EventList}
@@ -100,6 +102,10 @@ class HomeAdmin extends Component<Props, State> {
             list={RegisterList}
             edit={RegisterEdit}
             create={RegisterCreate}
+          />
+          <Resource
+            name="users"
+            list={UserList}
           />
         </Admin>
       </div>
