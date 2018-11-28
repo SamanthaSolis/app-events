@@ -1,14 +1,5 @@
 import React, { Component } from 'react';
-import Home from './Home';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  Switch,
-  Redirect,
-} from 'react-router-dom';
-import { Admin, Resource, ListGuesser, fetchUtils } from 'react-admin';
-import jsonServerProvider from 'ra-data-json-server';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import HomeAdmin from './HomeAdmin';
 import Cookies from 'universal-cookie';
 import { httpGet } from './api/HttpRequests';
@@ -21,25 +12,26 @@ import MainContent from './MainContent';
 type Props = {};
 type State = {};
 
-class App extends Component<Props, State> {
+export default class App extends Component<Props, State> {
   /* ================================ DECLARATIONS ================================ */
-  state = {
-    isAuth: undefined,
-  };
+  state = { isAuth: undefined };
 
   /* ================================ RENDER ================================ */
   render() {
     const { isAuth } = this.state;
     return (
       <div>
-        <Router>
+        <Router ref="router">
           <div>
             <Switch>
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/signup" component={Signup} />
-              {isAuth && <Route path="/admin" component={HomeAdmin} />}
-              {isAuth && <Route path="/" component={MainContent} />}
-              {isAuth === false && <Redirect to="/login" />}
+              {isAuth === false && (
+                <Route exact path="/login" component={Login} />
+              )}
+              {isAuth === false && (
+                <Route exact path="/signup" component={Signup} />
+              )}
+              {isAuth === true && <Route path="/admin" component={HomeAdmin} />}
+              {isAuth === true && <Route path="/" component={MainContent} />}
             </Switch>
           </div>
         </Router>
@@ -49,19 +41,19 @@ class App extends Component<Props, State> {
 
   /* ================================ LOGIC ================================ */
   async componentDidMount() {
-    const cookies = new Cookies();
-    const email = cookies.get('email');
-    const authentication_token = cookies.get('authentication_token');
-    const response = await httpGet(`sessions`, {
-      email: email,
-      authentication_token: authentication_token,
-    });
-    if (!response) {
-      this.setState({ isAuth: true });
+    const response = await httpGet(`test`);
+    this.setState({ isAuth: !!response });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.isAuth !== this.state.isAuth) {
+      if (this.state.isAuth === true) {
+        this.refs.router.history.push('/events');
+      } else if (this.state.isAuth === false) {
+        this.refs.router.history.push('/login');
+      }
     }
   }
 }
 
 /* ================================ STYLES ================================ */
-
-export default App;

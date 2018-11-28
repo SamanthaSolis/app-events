@@ -1,8 +1,8 @@
 import React from 'react';
 import { httpGet } from './api/HttpRequests';
 import Cookies from 'universal-cookie';
-import { Form, Button, Card, Image } from 'semantic-ui-react';
-import { Redirect, Link } from 'react-router-dom';
+import { Form, Button, Card } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 export class Signup extends React.Component {
   state = { email: '', password: '' };

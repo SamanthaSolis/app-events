@@ -50,7 +50,7 @@ class ShowEventsComponent extends Component<Props, State> {
                         </span>
                       </div>
                     </Item.Meta>
-                    <Item.Extra>{this.renderTags}</Item.Extra>
+                    {/*<Item.Extra>{this.renderTags}</Item.Extra>*/}
                     <Item.Description>
                       <p>{event.description}</p>
                     </Item.Description>
@@ -65,9 +65,9 @@ class ShowEventsComponent extends Component<Props, State> {
   }
 
   renderTags = () => {
-    var { event } = this.props;
+    const { event } = this.props;
     if (!event.tags) {
-      return null;
+      return <div />;
     }
     return event.tags.map(tag => (
       <Label key={`${event.id}-${tag}`}>{tag}</Label>

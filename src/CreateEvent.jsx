@@ -1,16 +1,6 @@
 import React, { Component } from 'react';
-import {
-  Grid,
-  Form,
-  Checkbox,
-  Button,
-  Card,
-  Item,
-  Select,
-} from 'semantic-ui-react';
-import { Event } from './models/Event.jsx';
+import { Form, Button, Card, Item, Select } from 'semantic-ui-react';
 import { Place } from './models/Place.jsx';
-import { handleChange } from './utils/StateUtil.jsx';
 import { httpPost } from './api/HttpRequests.jsx';
 
 /* ================================ CONFIGURATION ================================ */

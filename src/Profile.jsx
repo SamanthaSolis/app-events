@@ -1,18 +1,8 @@
 import React, { Component } from 'react';
-import {
-  Grid,
-  Icon,
-  Button,
-  Input,
-  Item,
-  Card,
-  Image,
-  Form,
-} from 'semantic-ui-react';
+import { Grid, Button, Item, Card, Image, Form } from 'semantic-ui-react';
 import Student from './models/Student.jsx';
 import { httpGet } from './api/HttpRequests.jsx';
 import { dummyEvents } from './utils/DummyData.jsx';
-import { handleChange } from './utils/StateUtil.jsx';
 
 /* ================================ CONFIGURATION ================================ */
 type Props = {};

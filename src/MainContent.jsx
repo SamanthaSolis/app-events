@@ -5,16 +5,10 @@ import ProfileComponent from './Profile.jsx';
 import CreateEventComponent from './CreateEvent.jsx';
 import MyEventsComponent from './MyEvents.jsx';
 import RegisteredEventsComponent from './RegisteredEvents.jsx';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  Redirect,
-} from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 import { Button, Icon, Menu, Sidebar } from 'semantic-ui-react';
-import axios from 'axios';
-import { Login } from './Login';
 import Cookies from 'universal-cookie';
+import { httpPut } from './api/HttpRequests';
 
 /* ================================ CONFIGURATION ================================ */
 type Props = {};
@@ -40,7 +34,7 @@ export default class MainContent extends Component<Props, State> {
           vertical
           onHide={this.changeVisibility}
           visible={isVisible}
-          size="medium"
+          size="huge"
           width="thin"
         >
           <Menu.Item as={Link} to="/profile">
@@ -94,13 +88,18 @@ export default class MainContent extends Component<Props, State> {
   handleItemClick = (e, { name }) => {
     this.setState({ currentView: name });
   };
-  logout = () => {
+
+  logout = async () => {
     const cookies = new Cookies();
-    cookies.set('email', '', { path: '/' });
-    cookies.set('authentication_token', '', {
-      path: '/',
+    const email = cookies.get('email');
+    const response = await httpPut(`auth/logout`, {
+      email: email,
     });
-    this.props.history.push('/login');
+    if (response) {
+      cookies.set('email', null);
+      cookies.set('access_token', null);
+      this.props.history.push('/login');
+    }
   };
 }
 

@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { Menu } from 'semantic-ui-react';
 import DatePicker from './components/DatePicker.jsx';
-import { Button, Popup, Icon, Input, Segment,Grid, Image,Sidebar,Header } from 'semantic-ui-react';
+import { Button, Popup, Icon, Input, Segment, Image } from 'semantic-ui-react';
 import { handleChange } from './utils/StateUtil.jsx';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 /* ================================ CONFIGURATION ================================ */
-type Props = {
-};
+type Props = {};
 type State = {
-  date: string
+  date: string,
 };
 
 class MenuComponent extends Component<Props, State> {
@@ -20,7 +19,7 @@ class MenuComponent extends Component<Props, State> {
 
   /* ================================ RENDER ================================ */
   render() {
-    const { date, activeItem } = this.state;
+    const { date } = this.state;
     return (
       <Segment className="turquoise" inverted style={menuContainerStyle}>
         <Menu
@@ -30,17 +29,11 @@ class MenuComponent extends Component<Props, State> {
           secondary
           style={menuStyle}
         >
-          <Menu.Item
-            onClick={this.props.handleSidebar}
-          >
-           <Icon name="user" />
+          <Menu.Item onClick={this.props.handleSidebar}>
+            <Icon name="user" />
           </Menu.Item>
 
-          <Menu.Item
-            as={Link}
-            to="/events"
-            style={{ padding: '0px' }}
-          >
+          <Menu.Item as={Link} to="/events" style={{ padding: '0px' }}>
             <Image src="logo.jpg" alt="logo" style={logoStyle} />
           </Menu.Item>
           <Menu.Menu position="right">

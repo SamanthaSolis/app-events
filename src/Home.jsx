@@ -1,16 +1,6 @@
 import React, { Component } from 'react';
-import MenuComponent from './Menu.jsx';
-import EventsComponent from './Events.jsx';
-import ProfileComponent from './Profile.jsx';
-import CreateEventComponent from './CreateEvent.jsx';
-import MyEventsComponent from './MyEvents.jsx';
-import RegisteredEventsComponent from './RegisteredEvents.jsx';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
-import { Button, Icon, Menu, Sidebar } from 'semantic-ui-react';
+import { Switch } from 'react-router-dom';
 import axios from 'axios';
-import {Login} from './Login';
-import { Signup } from './Signup';
-import MainContent from './MainContent';
 
 /* ================================ CONFIGURATION ================================ */
 type Props = {};
@@ -21,17 +11,13 @@ export default class Home extends Component<Props, State> {
   /* ================================ DECLARATIONS ================================ */
   state = {
     currentUser: null,
-    authenticated: true
   };
 
   /* ================================ RENDER ================================ */
   render() {
-    const {authenticated} = this.state;
     return (
       <div style={appStyle}>
-        <Switch>
-          
-        </Switch>
+        <Switch />
       </div>
     );
   }
@@ -40,7 +26,7 @@ export default class Home extends Component<Props, State> {
   componentDidMount() {
     axios
       .get('/users/check_for_user', {})
-      .then((response) => {
+      .then(response => {
         if (response.data.email) {
           this.setState({
             currentUser: response.data.email,
@@ -51,7 +37,7 @@ export default class Home extends Component<Props, State> {
           });
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   }

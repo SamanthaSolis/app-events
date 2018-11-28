@@ -44,7 +44,7 @@ export class Login extends React.Component {
                 <Button
                   fluid
                   type="submit"
-                  color="primary"
+                  className="primary"
                   size="large"
                   onClick={this.handleSignin}
                 >
@@ -53,7 +53,13 @@ export class Login extends React.Component {
               </div>
             </Form>
             <Divider horizontal>Or</Divider>
-            <Button as={Link} fluid color="secondary" size="large" to="/signup">
+            <Button
+              as={Link}
+              fluid
+              className="secondary"
+              size="large"
+              to="/signup"
+            >
               Sign Up
             </Button>
           </Card>
@@ -76,16 +82,18 @@ export class Login extends React.Component {
   };
 
   logIn(email, password) {
-    httpPost(`sessions`, {
-      email: email,
-      password: password,
-    })
+    httpPost(
+      `auth/login`,
+      {
+        email: email,
+        password: password,
+      },
+      false,
+    )
       .then(response => {
         const cookies = new Cookies();
-        cookies.set('email', response.email, { path: '/' });
-        cookies.set('authentication_token', response.authentication_token, {
-          path: '/',
-        });
+        cookies.set('email', email);
+        cookies.set('access_token', response.access_token);
         this.setState({ isAuth: true });
       })
       .catch(error => {

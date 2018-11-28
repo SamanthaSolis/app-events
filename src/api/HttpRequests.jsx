@@ -1,9 +1,18 @@
+import Cookies from 'universal-cookie';
 import axios from 'axios';
 
-var baseUrl = `http://localhost:3001`;
-var httpGet = async (endpoint, requestData) => {
+const baseUrl = `http://localhost:3001`;
+const httpGet = async (endpoint, requestData) => {
+  const cookies = new Cookies();
+  const auth_token = cookies.get('access_token');
   try {
-    const response = await fetch(`${baseUrl}/${endpoint}`, requestData || {});
+    const response = await fetch(`${baseUrl}/${endpoint}`, {
+      method: 'get',
+      headers: new Headers({
+        Authorization: `Bearer ${auth_token}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      }),
+    });
     if (!response.ok) {
       throw Error(response.statusText);
     }
@@ -15,15 +24,21 @@ var httpGet = async (endpoint, requestData) => {
   }
 };
 
-var httpPost = async (endpoint, data) => {
+const httpPost = async (endpoint, data, requiresAuth = true) => {
   try {
+    const headers = {
+      Accept: 'application/json',
+    };
+    if (requiresAuth) {
+      const cookies = new Cookies();
+      const auth_token = cookies.get('access_token');
+      headers['Content-Type'] = 'application/x-www-form-urlencoded';
+      headers['Authorization'] = `Bearer ${auth_token}`;
+    }
     const response = await axios.post(`${baseUrl}/${endpoint}`, data, {
-      timeout: 10000,
+      timeout: 1000,
+      headers: headers,
       withCredentials: false,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
     });
     return await response.data;
   } catch (error) {
@@ -32,4 +47,29 @@ var httpPost = async (endpoint, data) => {
   }
 };
 
-export { httpGet, httpPost };
+const httpPut = async (endpoint, data, requiresAuth = true) => {
+  try {
+    const headers = {
+      Accept: 'application/json',
+    };
+    if (requiresAuth) {
+      const cookies = new Cookies();
+      const auth_token = cookies.get('access_token');
+      headers['Content-Type'] = 'application/x-www-form-urlencoded';
+      headers['Authorization'] = `Bearer ${auth_token}`;
+    }
+    console.log(headers);
+    console.log(data);
+    const response = await axios.put(`${baseUrl}/${endpoint}`, data, {
+      timeout: 1000,
+      headers: headers,
+      withCredentials: false,
+    });
+    return await response.data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export { httpGet, httpPost, httpPut };
