@@ -93,7 +93,7 @@ class EventsComponent extends Component<Props, State> {
               <Transition
                 visible={!currentEvent}
                 animation="browse"
-                duration={500}
+                duration={700}
               >
                 <Rail
                   style={{ margin: '70px 10px', width: '100%', zIndex: '5' }}
