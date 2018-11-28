@@ -8,14 +8,10 @@ export class Login extends React.Component {
   state = {
     email: '',
     password: '',
-    isAuth: undefined,
   };
 
   render() {
-    const { email, password, isAuth } = this.state;
-    if (isAuth === true) {
-      this.props.history.push('/events');
-    }
+    const { email, password } = this.state;
 
     return (
       <div style={loginContainerStyles}>
@@ -94,7 +90,7 @@ export class Login extends React.Component {
         const cookies = new Cookies();
         cookies.set('email', email);
         cookies.set('access_token', response.access_token);
-        this.setState({ isAuth: true });
+        this.props.changePage('/events');
       })
       .catch(error => {
         console.log(error);

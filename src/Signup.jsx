@@ -35,6 +35,7 @@ export class Signup extends React.Component {
 
   render() {
     const { email, password } = this.state;
+
     return (
       <div style={signupContainerStyles}>
         <Card style={signupCardStyles}>
@@ -94,7 +95,7 @@ export class Signup extends React.Component {
   handleSignup = e => {
     const { email, password } = this.state;
     this.signUp(email, password);
-    this.props.history.push('/events');
+    this.props.changePage('/events');
   };
 }
 

@@ -2,15 +2,19 @@ import Cookies from 'universal-cookie';
 import axios from 'axios';
 
 const baseUrl = `http://localhost:3001`;
-const httpGet = async (endpoint, requestData) => {
-  const cookies = new Cookies();
-  const auth_token = cookies.get('access_token');
+const httpGet = async (endpoint, params, requiresAuth = false) => {
   try {
-    const response = await fetch(`${baseUrl}/${endpoint}`, {
-      method: 'get',
-      headers: new Headers({
-        Authorization: `Bearer ${auth_token}`,
-      }),
+    const headers = { Accept: 'application/json' };
+    if (requiresAuth) {
+      const cookies = new Cookies();
+      const auth_token = cookies.get('access_token');
+      headers['Authorization'] = `Bearer ${auth_token}`;
+    }
+    const response = await axios.get(`${baseUrl}/${endpoint}`, {
+      params: params,
+      timeout: 1000,
+      headers: headers,
+      withCredentials: false,
     });
     if (!response.ok) {
       throw Error(response.statusText);

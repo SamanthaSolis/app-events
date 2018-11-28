@@ -36,37 +36,6 @@ class MenuComponent extends Component<Props, State> {
           <Menu.Item as={Link} to="/events" style={{ padding: '0px' }}>
             <Image src="logo.jpg" alt="logo" style={logoStyle} />
           </Menu.Item>
-          <Menu.Menu position="right">
-            <Input
-              style={searchEventStyle}
-              transparent
-              inverted
-              placeholder="Buscar Evento..."
-              icon="search"
-              iconPosition="left"
-            />
-            <Popup
-              wide
-              trigger={
-                <Button className="turquoise" icon secondary>
-                  Filtros
-                  <Icon name="angle down" />
-                </Button>
-              }
-              on="click"
-              hideOnScroll
-            >
-              <div>
-                <DatePicker
-                  name="date"
-                  title="Fecha"
-                  icon="calendar"
-                  value={date}
-                  onChange={handleChange(this)}
-                />
-              </div>
-            </Popup>
-          </Menu.Menu>
         </Menu>
       </Segment>
     );

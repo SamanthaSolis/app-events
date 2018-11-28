@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from 'react-router-dom';
 import HomeAdmin from './HomeAdmin';
 import Cookies from 'universal-cookie';
 import { httpGet } from './api/HttpRequests';
 import { Login } from './Login';
 import { Signup } from './Signup';
 import MainContent from './MainContent';
+import { Segment, Loader, Dimmer } from 'semantic-ui-react';
 
 /* ================================ CONFIGURATION ================================ */
 
@@ -18,26 +24,59 @@ export default class App extends Component<Props, State> {
 
   /* ================================ RENDER ================================ */
   render() {
-    const { isAuth } = this.state;
     return (
-      <div>
+      <div style={{ height: '100vh', overflow: 'hidden' }}>
         <Router ref="router">
-          <div>
-            <Switch>
-              {isAuth === false && (
-                <Route exact path="/login" component={Login} />
+          <Switch>
+            <Route
+              exact
+              path="/login"
+              render={props => (
+                <Login {...props} changePage={this.changePage} />
               )}
-              {isAuth === false && (
-                <Route exact path="/signup" component={Signup} />
+            />
+            <Route
+              exact
+              path="/signup"
+              render={props => (
+                <Signup {...props} changePage={this.changePage} />
               )}
-              {isAuth === true && <Route path="/admin" component={HomeAdmin} />}
-              {isAuth === true && <Route path="/" component={MainContent} />}
-            </Switch>
-          </div>
+            />
+            <Route
+              path="/admin"
+              render={props =>
+                this.loadRender(
+                  <HomeAdmin {...props} changePage={this.changePage} />,
+                )
+              }
+            />
+            <Route
+              path="/"
+              render={props =>
+                this.loadRender(
+                  <MainContent {...props} changePage={this.changePage} />,
+                )
+              }
+            />
+          </Switch>
         </Router>
       </div>
     );
   }
+
+  loadRender = comp => {
+    const { isAuth } = this.state;
+    return isAuth === undefined ? (
+      <Segment>
+        <Dimmer active>
+          <Loader content="Loading" />
+        </Dimmer>
+        {comp}
+      </Segment>
+    ) : (
+      comp
+    );
+  };
 
   /* ================================ LOGIC ================================ */
   async componentDidMount() {
@@ -45,15 +84,11 @@ export default class App extends Component<Props, State> {
     this.setState({ isAuth: !!response });
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.isAuth != undefined && prevState.isAuth !== this.state.isAuth) {
-      if (this.state.isAuth === true) {
-        this.refs.router.history.push('/events');
-      } else if (this.state.isAuth === false) {
-        this.refs.router.history.push('/login');
-      }
-    }
-  }
+  changePage = async path => {
+    this.refs.router.history.push(path);
+    const response = await httpGet(`test`);
+    this.setState({ isAuth: !!response });
+  };
 }
 
 /* ================================ STYLES ================================ */

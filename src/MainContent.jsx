@@ -23,8 +23,9 @@ export default class MainContent extends Component<Props, State> {
   /* ================================ RENDER ================================ */
   render() {
     const { isVisible } = this.state;
+
     return (
-      <Sidebar.Pushable>
+      <Sidebar.Pushable style={{ overflow: 'hidden' }}>
         <Sidebar
           as={Menu}
           animation="push"
@@ -65,15 +66,23 @@ export default class MainContent extends Component<Props, State> {
         </Sidebar>
         <Sidebar.Pusher dimmed={isVisible}>
           <MenuComponent handleSidebar={this.changeVisibility} />
-          <Route path="/" exact component={EventsComponent} />
-          <Route path="/events/" component={EventsComponent} />
-          <Route path="/profile/" component={ProfileComponent} />
-          <Route path="/create-event/" component={CreateEventComponent} />
-          <Route path="/my-events/" component={MyEventsComponent} />
-          <Route
-            path="/registered-events/"
-            component={RegisteredEventsComponent}
-          />
+          <div
+            style={{
+              display: 'grid',
+              overflow: 'auto',
+              height: 'calc(100vh - 65px)',
+            }}
+          >
+            <Route path="/" exact component={EventsComponent} />
+            <Route path="/events/" component={EventsComponent} />
+            <Route path="/profile/" component={ProfileComponent} />
+            <Route path="/create-event/" component={CreateEventComponent} />
+            <Route path="/my-events/" component={MyEventsComponent} />
+            <Route
+              path="/registered-events/"
+              component={RegisteredEventsComponent}
+            />
+          </div>
         </Sidebar.Pusher>
       </Sidebar.Pushable>
     );
@@ -93,7 +102,7 @@ export default class MainContent extends Component<Props, State> {
     const cookies = new Cookies();
     cookies.set('email', null);
     cookies.set('access_token', null);
-    this.props.history.push('/login');
+    this.props.changePage('/login');
   };
 }
 
