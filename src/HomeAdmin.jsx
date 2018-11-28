@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Admin, Resource, ListGuesser, fetchUtils } from 'react-admin';
+import Cookies from 'universal-cookie';
+import axios from 'axios';
+import { Admin, Resource, ListGuesser, fetchUtils, EditGuesser } from 'react-admin';
 import jsonServerProvider from 'ra-data-json-server';
 import { EventList, EventCreate, EventEdit } from './AdminEvent';
 import { PlaceList, PlaceCreate, PlaceEdit } from './AdminPlace';
@@ -8,15 +10,17 @@ import { StudentList, StudentEdit, StudentCreate } from './AdminStudent';
 /* ================================ CONFIGURATION ================================ */
 const httpClient = (url, options = {}) => {
   if (!options.headers) {
+    const cookies = new Cookies();
+    const auth_token = cookies.get('access_token');
     options.headers = new Headers({
       Accept: 'application/json',
+      Authorization: `Bearer ${auth_token}`,
     });
   }
-  options.headers.set('Content-Type', 'application/json');
-  options.headers.set('Access-Control-Allow-Credentials', true);
+  //options.headers.set('Access-Control-Allow-Credentials', true);
   return fetchUtils.fetchJson(url, options);
 };
-const dataProvider = jsonServerProvider('http://localhost:3001');
+const dataProvider = jsonServerProvider('http://localhost:3001', httpClient);
 
 type Props = {};
 type State = {};
@@ -38,13 +42,13 @@ class HomeAdmin extends Component<Props, State> {
         <Resource
           name="places"
           list={PlaceList}
-          edit={PlaceEdit}
+          edit={EditGuesser}
           create={PlaceCreate}
         />
         <Resource
           name="students"
           list={StudentList}
-          edit={StudentEdit}
+          edit={ListGuesser}
           create={StudentCreate}
         />
         <Resource name="employees" list={ListGuesser} edit={ListGuesser} />

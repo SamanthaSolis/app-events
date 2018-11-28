@@ -46,7 +46,7 @@ export default class App extends Component<Props, State> {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.isAuth !== this.state.isAuth) {
+    if (prevState.isAuth != undefined && prevState.isAuth !== this.state.isAuth) {
       if (this.state.isAuth === true) {
         this.refs.router.history.push('/events');
       } else if (this.state.isAuth === false) {
