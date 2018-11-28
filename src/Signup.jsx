@@ -1,5 +1,5 @@
 import React from 'react';
-import { httpGet } from './api/HttpRequests';
+import { httpPost } from './api/HttpRequests';
 import Cookies from 'universal-cookie';
 import { Form, Button, Card } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
@@ -13,19 +13,19 @@ export class Signup extends React.Component {
   };
 
   signUp = (email, password) => {
-    httpGet(`sessions`, {
-      user: {
+    httpPost(
+      `auth/register`,
+      {
+        name: 'Pudin',
         email: email,
         password: password,
-        password_confirmation: password,
       },
-    })
+      false,
+    )
       .then(response => {
         const cookies = new Cookies();
-        cookies.set('email', response.email, { path: '/' });
-        cookies.set('authentication_token', response.authentication_token, {
-          path: '/',
-        });
+        cookies.set('email', email);
+        cookies.set('access_token', response.access_token);
         this.setState({ isAuth: true });
       })
       .catch(error => {
@@ -92,6 +92,8 @@ export class Signup extends React.Component {
     this.setState({ email: e.target.value });
   };
   handleSignup = e => {
+    const { email, password } = this.state;
+    this.signUp(email, password);
     this.props.history.push('/events');
   };
 }
