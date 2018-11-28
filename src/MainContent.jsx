@@ -91,15 +91,9 @@ export default class MainContent extends Component<Props, State> {
 
   logout = async () => {
     const cookies = new Cookies();
-    const email = cookies.get('email');
-    const response = await httpPut(`auth/logout`, {
-      email: email,
-    });
-    if (response) {
-      cookies.set('email', null);
-      cookies.set('access_token', null);
-      this.props.history.push('/login');
-    }
+    cookies.set('email', null);
+    cookies.set('access_token', null);
+    this.props.history.push('/login');
   };
 }
 

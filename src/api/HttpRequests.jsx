@@ -10,7 +10,6 @@ const httpGet = async (endpoint, requestData) => {
       method: 'get',
       headers: new Headers({
         Authorization: `Bearer ${auth_token}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
       }),
     });
     if (!response.ok) {
@@ -32,7 +31,6 @@ const httpPost = async (endpoint, data, requiresAuth = true) => {
     if (requiresAuth) {
       const cookies = new Cookies();
       const auth_token = cookies.get('access_token');
-      headers['Content-Type'] = 'application/x-www-form-urlencoded';
       headers['Authorization'] = `Bearer ${auth_token}`;
     }
     const response = await axios.post(`${baseUrl}/${endpoint}`, data, {
@@ -55,11 +53,8 @@ const httpPut = async (endpoint, data, requiresAuth = true) => {
     if (requiresAuth) {
       const cookies = new Cookies();
       const auth_token = cookies.get('access_token');
-      headers['Content-Type'] = 'application/x-www-form-urlencoded';
       headers['Authorization'] = `Bearer ${auth_token}`;
     }
-    console.log(headers);
-    console.log(data);
     const response = await axios.put(`${baseUrl}/${endpoint}`, data, {
       timeout: 1000,
       headers: headers,
