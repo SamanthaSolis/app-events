@@ -1,12 +1,21 @@
 import React, { Component } from 'react';
-import { Card, Item, Label, Image, GridRow, Grid } from 'semantic-ui-react';
+import {
+  Card,
+  Item,
+  Label,
+  Image,
+  GridRow,
+  Grid,
+  Button,
+  Icon,
+} from 'semantic-ui-react';
 
 type Props = {
   event: Event,
 };
 type State = {};
 
-class ShowEventsComponent extends Component<Props, State> {
+export default class EventComponent extends Component<Props, State> {
   state = {};
 
   render() {
@@ -50,7 +59,7 @@ class ShowEventsComponent extends Component<Props, State> {
                         </span>
                       </div>
                     </Item.Meta>
-                    {/*<Item.Extra>{this.renderTags}</Item.Extra>*/}
+                    <Item.Extra>{this.renderTags}</Item.Extra>
                     <Item.Description>
                       <p>{event.description}</p>
                     </Item.Description>
@@ -59,6 +68,12 @@ class ShowEventsComponent extends Component<Props, State> {
               </Grid>
             </Item.Content>
           </Item>
+        </Card.Content>
+        <Card.Content extra>
+          <a onClick={this.handleEventClick}>
+            <Icon name="angle double down" />
+            See more...
+          </a>
         </Card.Content>
       </Card>
     );
@@ -73,6 +88,8 @@ class ShowEventsComponent extends Component<Props, State> {
       <Label key={`${event.id}-${tag}`}>{tag}</Label>
     ));
   };
-}
 
-export default ShowEventsComponent;
+  handleEventClick = (e, data) => {
+    this.props.setCurrentEvent(this.props.event);
+  };
+}

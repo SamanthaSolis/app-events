@@ -6,19 +6,21 @@ type Props = {
 };
 type State = {};
 
-class ShowEventsComponent extends Component<Props, State> {
+export default class ShowEventsComponent extends Component<Props, State> {
   state = {};
 
   render() {
-    var { events } = this.props;
+    var { events, setCurrentEvent } = this.props;
     return (
       <div>
         {events.map(event => (
-          <EventComponent key={event.id} event={event} />
+          <EventComponent
+            key={event.id}
+            event={event}
+            setCurrentEvent={setCurrentEvent}
+          />
         ))}
       </div>
     );
   }
 }
-
-export default ShowEventsComponent;

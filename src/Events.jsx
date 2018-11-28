@@ -9,6 +9,7 @@ import {
   Button,
   Dropdown,
   Icon,
+  Transition,
 } from 'semantic-ui-react';
 import ShowEventsComponent from './ShowEvents.jsx';
 import CategoriesComponent from './Categories.jsx';
@@ -22,6 +23,7 @@ import { handleChange } from './utils/StateUtil.jsx';
 type Props = {};
 type State = {
   events: Event[],
+  currentEvent: Event,
 };
 
 class EventsComponent extends Component<Props, State> {
@@ -30,15 +32,23 @@ class EventsComponent extends Component<Props, State> {
     events: [],
     date: '',
     search: '',
+    currentEvent: undefined,
   };
 
   /* ================================ RENDER ================================ */
   render() {
-    var { events, contextRef, date, search } = this.state;
+    var { events, contextRef, date, search, currentEvent } = this.state;
     return (
       <div style={eventsContainerStyles}>
         <Grid divided="vertically" style={{ marginTop: '45px' }}>
-          <Rail style={{ margin: '70px 10px', width: '70%', zIndex: '5' }}>
+          <Rail
+            style={{
+              margin: '70px 10px',
+              width: '70%',
+              zIndex: '5',
+              height: '45px',
+            }}
+          >
             <Sticky>
               <Input
                 style={searchEventStyle}
@@ -79,16 +89,27 @@ class EventsComponent extends Component<Props, State> {
             </Sticky>
           </Rail>
           <Grid.Row columns={2}>
-            <Grid.Column width={5} textAlign="left">
-              <Rail style={{ margin: '70px 10px', width: '100%', zIndex: '5' }}>
-                <Sticky>
-                  <CategoriesComponent />
-                </Sticky>
-              </Rail>
+            <Grid.Column width={currentEvent ? 0 : 5} textAlign="left">
+              <Transition
+                visible={!currentEvent}
+                animation="browse"
+                duration={500}
+              >
+                <Rail
+                  style={{ margin: '70px 10px', width: '100%', zIndex: '5' }}
+                >
+                  <Sticky>
+                    <CategoriesComponent />
+                  </Sticky>
+                </Rail>
+              </Transition>
             </Grid.Column>
-            <Grid.Column width={1} />
-            <Grid.Column width={10}>
-              <ShowEventsComponent events={events} />
+            <Grid.Column width={currentEvent ? 0 : 1} />
+            <Grid.Column width={currentEvent ? 16 : 10}>
+              <ShowEventsComponent
+                events={events}
+                setCurrentEvent={this.setCurrentEvent}
+              />
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -115,6 +136,10 @@ class EventsComponent extends Component<Props, State> {
   };
 
   handleContextRef = contextRef => this.setState({ contextRef });
+
+  setCurrentEvent = event => {
+    this.setState({ currentEvent: event });
+  };
 }
 
 /* ================================ STYLES ================================ */
