@@ -1,17 +1,30 @@
 import React, { Component } from 'react';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
-import { Admin, Resource, ListGuesser, fetchUtils, EditGuesser } from 'react-admin';
+import {
+  Admin,
+  Resource,
+  ListGuesser,
+  fetchUtils,
+  EditGuesser,
+} from 'react-admin';
 import jsonServerProvider from 'ra-data-json-server';
 import { EventList, EventCreate, EventEdit } from './AdminEvent';
 import { PlaceList, PlaceCreate, PlaceEdit } from './AdminPlace';
 import { StudentList, StudentEdit, StudentCreate } from './AdminStudent';
 import { EmployeeList, EmployeeEdit, EmployeeCreate } from './AdminEmployee';
-import { Student_groupList, Student_groupEdit, Student_groupCreate } from './AdminStudentGroup';
-import { ReservationList, ReservationEdit, ReservationCreate } from './AdminReservation';
+import {
+  Student_groupList,
+  Student_groupEdit,
+  Student_groupCreate,
+} from './AdminStudentGroup';
+import {
+  ReservationList,
+  ReservationEdit,
+  ReservationCreate,
+} from './AdminReservation';
 import { RegisterList, RegisterEdit, RegisterCreate } from './AdminRegister';
-import { Filter,ReferenceInput, SelectInput, TextInput } from 'react-admin';
-
+import { Filter, ReferenceInput, SelectInput, TextInput } from 'react-admin';
 
 /* ================================ CONFIGURATION ================================ */
 const httpClient = (url, options = {}) => {
@@ -38,49 +51,58 @@ class HomeAdmin extends Component<Props, State> {
   /* ================================ RENDER ================================ */
   render() {
     return (
-
-
-      <Admin dataProvider={dataProvider}>
-        <Resource
-          name="events"
-          list={EventList}
-          edit={EventEdit}
-          create={EventCreate}
-        />
-        <Resource
-          name="places"
-          list={PlaceList}
-          edit={PlaceEdit}
-          create={PlaceCreate}
-        />
-        <Resource
-          name="students"
-          list={StudentList}
-          edit={StudentEdit}
-          create={StudentCreate}
-        />
-        <Resource 
-          name="employees" 
-          list={EmployeeList} 
-          edit={EmployeeEdit} 
-          create={EmployeeCreate}
+      <div
+        style={{
+          display: 'grid',
+          overflow: 'auto',
+          height: '100vh',
+        }}
+      >
+        <Admin dataProvider={dataProvider}>
+          <Resource
+            name="events"
+            list={EventList}
+            edit={EventEdit}
+            create={EventCreate}
           />
-        <Resource 
-          name="student_groups" 
-          list={Student_groupList} 
-          edit={Student_groupEdit}
-          create={Student_groupCreate} 
+          <Resource
+            name="places"
+            list={PlaceList}
+            edit={PlaceEdit}
+            create={PlaceCreate}
           />
-        <Resource name="reservations" 
-          list={ReservationList} 
-          edit={ReservationEdit} 
-          create={ReservationCreate} 
+          <Resource
+            name="students"
+            list={StudentList}
+            edit={StudentEdit}
+            create={StudentCreate}
           />
-        <Resource name="registers" 
-        list={RegisterList} 
-        edit={RegisterEdit} 
-        create={RegisterCreate} />
-      </Admin>
+          <Resource
+            name="employees"
+            list={EmployeeList}
+            edit={EmployeeEdit}
+            create={EmployeeCreate}
+          />
+          <Resource
+            name="student_groups"
+            list={Student_groupList}
+            edit={Student_groupEdit}
+            create={Student_groupCreate}
+          />
+          <Resource
+            name="reservations"
+            list={ReservationList}
+            edit={ReservationEdit}
+            create={ReservationCreate}
+          />
+          <Resource
+            name="registers"
+            list={RegisterList}
+            edit={RegisterEdit}
+            create={RegisterCreate}
+          />
+        </Admin>
+      </div>
     );
   }
 
@@ -88,7 +110,5 @@ class HomeAdmin extends Component<Props, State> {
 }
 
 /* ================================ STYLES ================================ */
-
-
 
 export default HomeAdmin;
