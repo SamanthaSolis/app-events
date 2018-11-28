@@ -4,11 +4,11 @@ import EventsComponent from './Events.jsx';
 import ProfileComponent from './Profile.jsx';
 import CreateEventComponent from './CreateEvent.jsx';
 import MyEventsComponent from './MyEvents.jsx';
+import DetailedEvent from './DetailedEvent.jsx';
 import RegisteredEventsComponent from './RegisteredEvents.jsx';
 import { Route, Link } from 'react-router-dom';
 import { Button, Icon, Menu, Sidebar } from 'semantic-ui-react';
 import Cookies from 'universal-cookie';
-import { httpPut } from './api/HttpRequests';
 
 /* ================================ CONFIGURATION ================================ */
 type Props = {};
@@ -74,7 +74,8 @@ export default class MainContent extends Component<Props, State> {
             }}
           >
             <Route path="/" exact component={EventsComponent} />
-            <Route path="/events/" component={EventsComponent} />
+            <Route path="/events" exact component={EventsComponent} />
+            <Route path="/events/:id" component={DetailedEvent} />
             <Route path="/profile/" component={ProfileComponent} />
             <Route path="/create-event/" component={CreateEventComponent} />
             <Route path="/my-events/" component={MyEventsComponent} />

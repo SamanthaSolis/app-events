@@ -1,14 +1,6 @@
 import React, { Component } from 'react';
-import {
-  Card,
-  Item,
-  Label,
-  Image,
-  GridRow,
-  Grid,
-  Button,
-  Icon,
-} from 'semantic-ui-react';
+import { Card, Item, Label, Image, GridRow, Grid } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 type Props = {
   event: Event,
@@ -31,7 +23,11 @@ export default class EventComponent extends Component<Props, State> {
       hour: 'numeric',
     }).format(event.datetime);
     return (
-      <Card style={{ width: '90%', float: 'right', margin: '10px' }}>
+      <Card
+        as={Link}
+        to={`/events/${event.id}`}
+        style={{ width: '90%', float: 'right', margin: '10px' }}
+      >
         <Card.Content>
           <Item>
             <Item.Content>
@@ -88,19 +84,6 @@ export default class EventComponent extends Component<Props, State> {
             </Item.Content>
           </Item>
         </Card.Content>
-        <Card.Content extra>
-          {isExpanded ? (
-            <a onClick={this.handleLessClick}>
-              <Icon name="angle double up" />
-              See less...
-            </a>
-          ) : (
-            <a onClick={this.handleMoreClick}>
-              <Icon name="angle double down" />
-              See more...
-            </a>
-          )}
-        </Card.Content>
       </Card>
     );
   }
@@ -115,12 +98,7 @@ export default class EventComponent extends Component<Props, State> {
     ));
   };
 
-  handleMoreClick = (e, data) => {
+  handleDetailClick = (e, data) => {
     this.props.setCurrentEvent(this.props.event);
-    this.setState({ isExpanded: true });
-  };
-  handleLessClick = (e, data) => {
-    this.props.setCurrentEvent(undefined);
-    this.setState({ isExpanded: false });
   };
 }
