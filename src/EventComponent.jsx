@@ -16,9 +16,10 @@ type Props = {
 type State = {};
 
 export default class EventComponent extends Component<Props, State> {
-  state = {};
+  state = { isExpanded: false };
 
   render() {
+    var { isExpanded } = this.state;
     var { event } = this.props;
     var fecha = new Intl.DateTimeFormat('en-GB', {
       year: 'numeric',
@@ -37,18 +38,17 @@ export default class EventComponent extends Component<Props, State> {
               <Grid>
                 <GridRow>
                   <Grid.Column width={8}>
-                    <Image src={event.poster} size="small" />
+                    <Image
+                      src={event.poster}
+                      size={isExpanded ? 'large' : 'small'}
+                    />
                   </Grid.Column>
                   <Grid.Column width={8}>
-                    <Item.Header as="a">
-                      <h3>{event.name}</h3>
+                    <Item.Header as={isExpanded ? 'h1' : 'h3'}>
+                      {event.name}
                     </Item.Header>
                     <Item.Meta>
                       <div style={{ display: 'grid' }}>
-                        <span className="cinema">
-                          <b>LUGAR: </b>
-                          {event.place.name}
-                        </span>
                         <span className="cinema">
                           <b>FECHA: </b>
                           {fecha}
@@ -57,12 +57,31 @@ export default class EventComponent extends Component<Props, State> {
                           <b>HORA: </b>
                           {hora}
                         </span>
+                        <span className="cinema">
+                          <b>LUGAR: </b>
+                          {event.place.name}
+                        </span>
+                        {isExpanded ? (
+                          <React.Fragment>
+                            <span className="cinema">
+                              <b>Capacidad Máxima: </b>
+                              {event.place.max_capacity}
+                            </span>
+                            <span className="cinema">
+                              <b>PRECIO: </b>$ {event.place.price}
+                            </span>
+                          </React.Fragment>
+                        ) : null}
                       </div>
                     </Item.Meta>
                     <Item.Extra>{this.renderTags}</Item.Extra>
-                    <Item.Description>
-                      <p>{event.description}</p>
-                    </Item.Description>
+                    {isExpanded ? (
+                      <Item.Description>
+                        <p>{event.description}</p>
+                      </Item.Description>
+                    ) : (
+                      <div />
+                    )}
                   </Grid.Column>
                 </GridRow>
               </Grid>
@@ -70,10 +89,17 @@ export default class EventComponent extends Component<Props, State> {
           </Item>
         </Card.Content>
         <Card.Content extra>
-          <a onClick={this.handleEventClick}>
-            <Icon name="angle double down" />
-            See more...
-          </a>
+          {isExpanded ? (
+            <a onClick={this.handleLessClick}>
+              <Icon name="angle double up" />
+              See less...
+            </a>
+          ) : (
+            <a onClick={this.handleMoreClick}>
+              <Icon name="angle double down" />
+              See more...
+            </a>
+          )}
         </Card.Content>
       </Card>
     );
@@ -89,7 +115,12 @@ export default class EventComponent extends Component<Props, State> {
     ));
   };
 
-  handleEventClick = (e, data) => {
+  handleMoreClick = (e, data) => {
     this.props.setCurrentEvent(this.props.event);
+    this.setState({ isExpanded: true });
+  };
+  handleLessClick = (e, data) => {
+    this.props.setCurrentEvent(undefined);
+    this.setState({ isExpanded: false });
   };
 }
