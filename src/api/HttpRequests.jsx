@@ -2,7 +2,7 @@ import Cookies from 'universal-cookie';
 import axios from 'axios';
 
 const baseUrl = `http://localhost:3001`;
-const httpGet = async (endpoint, params, requiresAuth = false) => {
+const httpGet = async (endpoint, params, requiresAuth = true) => {
   try {
     const headers = { Accept: 'application/json' };
     if (requiresAuth) {
