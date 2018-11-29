@@ -126,8 +126,8 @@ class EventsComponent extends Component<Props, State> {
       const event = await httpGet(`events/${reservation.event.id}`);
       events.push(event);
     }
-    events = events.filter(x =>
-      x.name.toLowerCase().includes(search.toLowerCase()),
+    events = events.filter(
+      x => x.name && x.name.toLowerCase().includes(search.toLowerCase()),
     );
     this.setState({
       events: events,
