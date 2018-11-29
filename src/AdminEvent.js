@@ -21,19 +21,9 @@ import {
 } from 'react-admin';
 
 
-const PostFilter = (props) => (
-  <Filter {...props}>
-      <TextInput label="Search" source="q" alwaysOn />
-      <ReferenceInput label="Event" source="name" reference="name" allowEmpty>
-          <SelectInput optionText="name" />
-      </ReferenceInput>
-  </Filter>
-);
-
-
 
 export const EventList = props => (
-  <List {...props} filters={<PostFilter />}>
+  <List {...props}>
     <Datagrid rowClick="edit">
       <TextField source="id" />
       <TextField source="name" />
@@ -63,7 +53,7 @@ export const EventEdit = props => (
       <TextInput source="name" />
       <DateInput source="time" />
       <ReferenceInput source="user_id" reference="users">
-        <SelectInput optionText="mail" />
+        <SelectInput optionText="email" />
       </ReferenceInput>
       <ReferenceInput source="place_id" reference="places">
         <SelectInput optionText="building" />
