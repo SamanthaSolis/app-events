@@ -156,8 +156,7 @@ class CreateEventComponent extends Component<Props, State> {
       event_id: newEvent.id,
     });
     const resp = await httpPut(`events/${newEvent.id}`, formData, config);
-    console.log(newEvent);
-    console.log(newReservation);
+    this.props.history.push('/events');
   }
 
   handleChangePlace = (e, { name, value }) => {
@@ -165,7 +164,6 @@ class CreateEventComponent extends Component<Props, State> {
   };
 
   handleselectedFile = event => {
-    console.log(event.target.files[0]);
     this.setState({
       selectedFile: event.target.files[0],
     });
