@@ -1,24 +1,8 @@
 import React, { Component } from 'react';
 import { List, Card, Header } from 'semantic-ui-react';
+import { categories } from './CategoryData';
 
 /* ================================ CONFIGURATION ================================ */
-var categories = [
-  {
-    name: 'Ciencias',
-    image:
-      'http://icons.iconarchive.com/icons/graphicloads/colorful-long-shadow/256/Science-icon.png',
-  },
-  {
-    name: 'Humanidades',
-    image:
-      'https://www.everettcc.edu/files/programs/pathways/gp-humanities_large.png',
-  },
-  {
-    name: 'Filosofia',
-    image:
-      'https://banner2.kisspng.com/20180424/thw/kisspng-computer-icons-creativity-consultant-brainstorming-philosophy-5adf52d09fdee1.4882188915245851686548.jpg',
-  },
-];
 
 class CategoriesComponent extends Component {
   /* ================================ DECLARATIONS ================================ */
@@ -51,11 +35,11 @@ class CategoriesComponent extends Component {
       >
         {categories.map(category => (
           <List.Item
-            key={category.name}
-            style={selectCategoryClass(category)}
-            onClick={() => this.props.selectCategory(category)}
+            key={category.value}
+            style={selectCategoryClass(category.value)}
+            onClick={() => this.props.selectCategory(category.value)}
           >
-            <Header as="h4" image={category.image} content={category.name} />
+            <Header as="h4" image={category.image} content={category.text} />
           </List.Item>
         ))}
       </List>

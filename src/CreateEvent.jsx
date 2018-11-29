@@ -51,7 +51,7 @@ class CreateEventComponent extends Component<Props, State> {
                     onChange={this.handleChangeEvent}
                   />
                   <Form.Field
-                    name="area"
+                    name="areas"
                     control={Select}
                     options={areas}
                     label={{
@@ -61,7 +61,7 @@ class CreateEventComponent extends Component<Props, State> {
                     placeholder="Selecciona un area..."
                     search
                     searchInput={{ id: 'form-select-control-area' }}
-                    value={event.area}
+                    value={event.areas}
                     onChange={this.handleChangeEvent}
                   />
                   <Form.Group unstackable widths={3}>
@@ -96,15 +96,14 @@ class CreateEventComponent extends Component<Props, State> {
                     value={event.max_capacity}
                     onChange={this.handleChangeEvent}
                   />
-                  <input
-                    type="file"
-                    name=""
-                    id=""
-                    onChange={this.handleselectedFile}
-                  />
                   <Form.Field>
                     <label>Poster</label>
-                    <Button>Cargar</Button>
+                    <input
+                      type="file"
+                      name=""
+                      id=""
+                      onChange={this.handleselectedFile}
+                    />
                   </Form.Field>
                   <Form.Input
                     name="tags"
@@ -149,6 +148,7 @@ class CreateEventComponent extends Component<Props, State> {
       place_id: placeResponse.id,
       time: '2018-11-16T17:13:46.446Z',
     };
+    console.log(event);
     formData.append('event[poster]', file);
     const newEvent = await httpPost(`events`, event);
     const newReservation = await httpPost(`reservations`, {
