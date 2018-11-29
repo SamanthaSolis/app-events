@@ -3,6 +3,7 @@ import { Grid, Button, Item, Card, Image, Form } from 'semantic-ui-react';
 import Student from './models/Student.jsx';
 import { httpGet } from './api/HttpRequests.jsx';
 import { dummyEvents } from './utils/DummyData.jsx';
+import Cookies from 'universal-cookie';
 
 /* ================================ CONFIGURATION ================================ */
 type Props = {};
@@ -19,8 +20,9 @@ class ProfileComponent extends Component<Props, State> {
   /* ================================ RENDER ================================ */
   render() {
     var { student, edit } = this.state;
+    
     if (!student) {
-      return <div>LOADING bb</div>;
+      return <div>LOADING</div>;
     } else {
       return (
         <div style={eventsContainerStyles}>
@@ -39,42 +41,46 @@ class ProfileComponent extends Component<Props, State> {
                     <Item.Content>
                       <center>
                         <Image
-                          src="https://scontent.fmfe1-1.fna.fbcdn.net/v/t1.0-9/303745_3237982208910_1382882341_n.jpg?_nc_cat=109&_nc_ht=scontent.fmfe1-1.fna&oh=9d2d251e78c46d0c84ab737fec602ef0&oe=5C776309"
+                          src="https://womenaccelerators.org/wp-content/uploads/2018/03/default-profile.png"
                           size="small"
                           circular
                         />
+                        </center>
+
                         <Item.Header>
-                          {' '}
-                          <h2>
-                            {student.name} {student.second_name}
-                          </h2>
+                        <center>
+                          <h1>
+                            {student.name} {student.last_name}
+                          </h1>
+                          </center>
                         </Item.Header>
-                      </center>
+
                       <Form onSubmit={this.saveProfile}>
                         <Form.Input
-                          name="mail"
+                          name="name"
+                          label={<label style={labelstyle}>Nombre: </label>}
+                          placeholder=""
+                          readOnly={edit}
+                          value={student.name}
+                          onChange={this.handleChangeStudent}
+                        />
+
+                      <Form.Input
+                          name="last_name"
+                          label={<label style={labelstyle}>Apellido: </label>}
+                          placeholder=""
+                          readOnly={edit}
+                          value={student.last_name}
+                          onChange={this.handleChangeStudent}
+                        />
+
+
+                        <Form.Input
+                          name="email"
                           label={<label style={labelstyle}>mail: </label>}
                           placeholder=""
-                          readOnly={edit}
-                          value={student.mail}
-                          onChange={this.handleChangeStudent}
-                        />
-
-                        <Form.Input
-                          name="password"
-                          label={<label style={labelstyle}>password: </label>}
-                          placeholder=""
-                          readOnly={edit}
-                          value={student.password}
-                          onChange={this.handleChangeStudent}
-                        />
-
-                        <Form.Input
-                          name="semester"
-                          label={<label style={labelstyle}>semestre: </label>}
-                          placeholder=""
-                          readOnly={edit}
-                          value={student.semester}
+                          readOnly="true"
+                          value={student.email}
                           onChange={this.handleChangeStudent}
                         />
 
@@ -97,7 +103,7 @@ class ProfileComponent extends Component<Props, State> {
                         />
 
                         <Form.Input
-                          name="studentGroups"
+                          name="student_groups"
                           label={
                             <label style={labelstyle}>
                               Grupos Estudiantiles:{' '}
@@ -105,11 +111,11 @@ class ProfileComponent extends Component<Props, State> {
                           }
                           placeholder=""
                           readOnly={edit}
-                          value={student.studentGroups}
+                          value={student.student_groups}
                           onChange={this.handleChangeStudent}
                         />
 
-                        {!edit ? <Button type="submit">NEPE</Button> : null}
+                        {!edit ? <Button type="submit">SUBMIT</Button> : null}
                       </Form>
                     </Item.Content>
                   </Item>
@@ -128,9 +134,13 @@ class ProfileComponent extends Component<Props, State> {
   }
 
   async getStudent() {
-    var id = 1;
-    var student: Student = (await httpGet(`students/${id}`)) || dummyEvents;
-    this.setState({ student });
+    var registers = (await httpGet(`registers`)) || [];
+    const cookies = new Cookies();
+    const email = cookies.get('email');
+    var students = await httpGet(`students`, { email: email });
+    //this.setState({ student[0].id });
+
+    this.setState({ student: students[0] });
   }
 
   changeEdit = () => {
