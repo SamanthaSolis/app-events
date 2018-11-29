@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Grid, Button, Item, Card, Image, Form } from 'semantic-ui-react';
 import Student from './models/Student.jsx';
-import { httpGet } from './api/HttpRequests.jsx';
-import { dummyEvents } from './utils/DummyData.jsx';
+import { httpGet, httpPut } from './api/HttpRequests.jsx';
+import Cookies from 'universal-cookie';
 
 /* ================================ CONFIGURATION ================================ */
 type Props = {};
@@ -14,13 +14,14 @@ class ProfileComponent extends Component<Props, State> {
   /* ================================ DECLARATIONS ================================ */
   state = {
     edit: true,
+    isStudent: true,
   };
 
   /* ================================ RENDER ================================ */
   render() {
-    var { student, edit } = this.state;
-    if (!student) {
-      return <div>LOADING bb</div>;
+    var { user, edit, isStudent } = this.state;
+    if (!user) {
+      return <div />;
     } else {
       return (
         <div style={eventsContainerStyles}>
@@ -39,77 +40,75 @@ class ProfileComponent extends Component<Props, State> {
                     <Item.Content>
                       <center>
                         <Image
-                          src="https://scontent.fmfe1-1.fna.fbcdn.net/v/t1.0-9/303745_3237982208910_1382882341_n.jpg?_nc_cat=109&_nc_ht=scontent.fmfe1-1.fna&oh=9d2d251e78c46d0c84ab737fec602ef0&oe=5C776309"
-                          size="small"
+                          src={user.photo.url || ''}
+                          size="tiny"
                           circular
                         />
                         <Item.Header>
                           {' '}
                           <h2>
-                            {student.name} {student.second_name}
+                            {user.name} {user.last_name}
                           </h2>
                         </Item.Header>
                       </center>
                       <Form onSubmit={this.saveProfile}>
-                        <Form.Input
-                          name="mail"
-                          label={<label style={labelstyle}>mail: </label>}
-                          placeholder=""
-                          readOnly={edit}
-                          value={student.mail}
-                          onChange={this.handleChangeStudent}
-                        />
-
-                        <Form.Input
-                          name="password"
-                          label={<label style={labelstyle}>password: </label>}
-                          placeholder=""
-                          readOnly={edit}
-                          value={student.password}
-                          onChange={this.handleChangeStudent}
-                        />
-
-                        <Form.Input
-                          name="semester"
-                          label={<label style={labelstyle}>semestre: </label>}
-                          placeholder=""
-                          readOnly={edit}
-                          value={student.semester}
-                          onChange={this.handleChangeStudent}
-                        />
-
-                        <Form.Input
-                          name="semester"
-                          label={<label style={labelstyle}>semestre: </label>}
-                          placeholder=""
-                          readOnly={edit}
-                          value={student.semester}
-                          onChange={this.handleChangeStudent}
-                        />
-
-                        <Form.Input
-                          name="degree"
-                          label={<label style={labelstyle}>carrera: </label>}
-                          placeholder=""
-                          readOnly={edit}
-                          value={student.degree}
-                          onChange={this.handleChangeStudent}
-                        />
-
-                        <Form.Input
-                          name="studentGroups"
-                          label={
-                            <label style={labelstyle}>
-                              Grupos Estudiantiles:{' '}
-                            </label>
-                          }
-                          placeholder=""
-                          readOnly={edit}
-                          value={student.studentGroups}
-                          onChange={this.handleChangeStudent}
-                        />
-
-                        {!edit ? <Button type="submit">NEPE</Button> : null}
+                        {isStudent && (
+                          <React.Fragment>
+                            <Form.Input
+                              name="email"
+                              label={<label style={labelstyle}>Email: </label>}
+                              placeholder=""
+                              readOnly={edit}
+                              value={user.email}
+                              onChange={this.handleChangeStudent}
+                            />
+                            <Form.Input
+                              name="semester"
+                              label={
+                                <label style={labelstyle}>Semestre: </label>
+                              }
+                              placeholder=""
+                              readOnly={edit}
+                              value={user.semester}
+                              onChange={this.handleChangeStudent}
+                            />
+                            <Form.Input
+                              name="degree"
+                              label={
+                                <label style={labelstyle}>carrera: </label>
+                              }
+                              placeholder=""
+                              readOnly={edit}
+                              value={user.degree}
+                              onChange={this.handleChangeStudent}
+                            />
+                            <Form.Input
+                              name="student_groups"
+                              label={
+                                <label style={labelstyle}>
+                                  Grupos Estudiantiles:
+                                </label>
+                              }
+                              placeholder=""
+                              readOnly={edit}
+                              value={user.student_groups}
+                              onChange={this.handleChangeStudent}
+                            />
+                          </React.Fragment>
+                        )}
+                        {!isStudent && (
+                          <Form.Input
+                            name="department"
+                            label={
+                              <label style={labelstyle}>Departamento:</label>
+                            }
+                            placeholder=""
+                            readOnly={edit}
+                            value={user.department}
+                            onChange={this.handleChangeStudent}
+                          />
+                        )}
+                        {!edit ? <Button type="submit">Cambiar</Button> : null}
                       </Form>
                     </Item.Content>
                   </Item>
@@ -128,21 +127,42 @@ class ProfileComponent extends Component<Props, State> {
   }
 
   async getStudent() {
-    var id = 1;
-    var student: Student = (await httpGet(`students/${id}`)) || dummyEvents;
-    this.setState({ student });
+    const cookies = new Cookies();
+    const email = cookies.get('email');
+    const students = await httpGet(`students`);
+    const student = students.find(x => x.email === email);
+    if (student) {
+      this.setState({ user: student, isStudent: true });
+    } else {
+      const email = cookies.get('email');
+      const employees = await httpGet(`employees`);
+      const employee = employees.find(x => x.email === email);
+      this.setState({ user: employee, isStudent: false });
+    }
   }
 
   changeEdit = () => {
     this.setState({ edit: !this.state.edit });
   };
 
-  saveProfile = () => {
-    console.log(this.state.student);
+  saveProfile = async () => {
+    if (this.state.isStudent) {
+      var updatedStudent = await httpPut(
+        `students/${this.state.user.id}`,
+        this.state.user,
+      );
+      this.setState({ edit: false });
+    } else {
+      var updatedEmployee = await httpPut(
+        `employees/${this.state.user.id}`,
+        this.state.user,
+      );
+      this.setState({ edit: false });
+    }
   };
 
   handleChangeStudent = (e, { name, value }) => {
-    this.setState({ student: { ...this.state.student, [name]: value } });
+    this.setState({ user: { ...this.state.user, [name]: value } });
   };
 }
 

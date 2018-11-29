@@ -15,7 +15,7 @@ class CategoriesComponent extends Component {
     return (
       <Card style={categoriesCardStyle}>
         <Card.Content>
-          <Card.Header textAlign="center">Categorias</Card.Header>
+          <Card.Header textAlign="center">Areas</Card.Header>
         </Card.Content>
         <Card.Content>{this.renderCategoriesList()}</Card.Content>
       </Card>

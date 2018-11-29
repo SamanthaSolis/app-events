@@ -22,7 +22,6 @@ class CreateEventComponent extends Component<Props, State> {
     event: {},
     place: {},
     selectedFile: null,
-    loaded: 0,
   };
 
   /* ================================ RENDER ================================ */
@@ -132,10 +131,6 @@ class CreateEventComponent extends Component<Props, State> {
   };
 
   async createEvent() {
-    const { selectedFile } = this.state;
-    const file = new Blob([selectedFile]);
-
-    const formData = new FormData();
     var newPlace = {
       ...this.state.place,
       floor: +this.state.place.floor,
@@ -148,13 +143,15 @@ class CreateEventComponent extends Component<Props, State> {
       place_id: placeResponse.id,
       time: '2018-11-16T17:13:46.446Z',
     };
-    console.log(event);
-    formData.append('event[poster]', file);
     const newEvent = await httpPost(`events`, event);
     const newReservation = await httpPost(`reservations`, {
       approval: true,
       event_id: newEvent.id,
     });
+    const { selectedFile } = this.state;
+    const file = new Blob([selectedFile]);
+    const formData = new FormData();
+    formData.append('event[poster]', file);
     const resp = await httpPut(`events/${newEvent.id}`, formData, config);
     this.props.history.push('/events');
   }
