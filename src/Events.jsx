@@ -140,9 +140,10 @@ class EventsComponent extends Component<Props, State> {
     events =
       events.filter(
         x =>
+          this.state.selectedCategories.length <= 0 ||
           !x.areas ||
           (this.state.selectedCategories &&
-            x.areas.includes(this.state.selectedCategories)),
+            this.state.selectedCategories.includes(x.areas)),
       ) || [];
     this.setState({
       events: events,

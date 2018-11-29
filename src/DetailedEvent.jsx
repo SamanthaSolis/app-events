@@ -75,7 +75,10 @@ export default class DetailedEvent extends Component<Props, State> {
                             {event.place.max_capacity} personas
                           </span>
                           <span className="cinema">
-                            <b>PRECIO: </b>$ {event.place.price}
+                            <b>PRECIO: </b>$ {event.price}
+                          </span>
+                          <span className="cinema">
+                            <b>Contacto: </b>$ {event.contact}
                           </span>
                         </div>
                       </Item.Meta>
@@ -120,9 +123,7 @@ export default class DetailedEvent extends Component<Props, State> {
     if (!event.tags) {
       return <div />;
     }
-    return event.tags.map(tag => (
-      <Label key={`${event.id}-${tag}`}>{tag}</Label>
-    ));
+    return <Label>{event.tags}</Label>;
   };
 
   handleRegisterEvent = () => {

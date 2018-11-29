@@ -1,11 +1,15 @@
 import React from 'react';
-import { httpPost } from './api/HttpRequests';
+import { httpPost, httpPut } from './api/HttpRequests';
 import Cookies from 'universal-cookie';
 import { Form, Button, Card, Checkbox } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 export class Signup extends React.Component {
-  state = { user: { name: '', email: '', password: '' }, isStudent: true };
+  state = {
+    user: { name: '', email: '', password: '' },
+    isStudent: true,
+    selectedFile: null,
+  };
 
   render() {
     const { user, isStudent } = this.state;
@@ -58,6 +62,10 @@ export class Signup extends React.Component {
               value={user.password}
               onChange={this.changeChangeUser}
             />
+            <Form.Field>
+              <label>Foto</label>
+              <input type="file" onChange={this.handleselectedFile} />
+            </Form.Field>
             <Checkbox
               label="¿Eres un estudiante?"
               checked={isStudent}
@@ -142,10 +150,14 @@ export class Signup extends React.Component {
       { email: user.email, password: user.password },
       false,
     );
+    const { selectedFile } = this.state;
+    const file = new Blob([selectedFile]);
+    const formData = new FormData();
     if (login && newUser) {
       const cookies = new Cookies();
       cookies.set('email', user.email);
       cookies.set('access_token', login.access_token);
+      const config = { 'content-type': 'multipart/form-data' };
       if (this.state.isStudent) {
         const newStudent = await httpPost(`students`, {
           ...user,
@@ -153,13 +165,29 @@ export class Signup extends React.Component {
           photo: 'algo',
           department: undefined,
         });
+        formData.append('student[photo]', file);
+        const resp = await httpPut(
+          `students/${newStudent.id}`,
+          formData,
+          config,
+        );
       } else {
         const newEmployee = await httpPost(`employees`, {
           ...user,
           password: undefined,
         });
+        formData.append('employee[photo]', file);
+        const resp = await httpPut(
+          `employees/${newEmployee.id}`,
+          formData,
+          config,
+        );
       }
     }
+  };
+
+  handleselectedFile = event => {
+    this.setState({ selectedFile: event.target.files[0] });
   };
 }
 

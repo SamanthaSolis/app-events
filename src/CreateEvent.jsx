@@ -22,7 +22,6 @@ class CreateEventComponent extends Component<Props, State> {
     event: {},
     place: {},
     selectedFile: null,
-    loaded: 0,
   };
 
   /* ================================ RENDER ================================ */
@@ -51,7 +50,7 @@ class CreateEventComponent extends Component<Props, State> {
                     onChange={this.handleChangeEvent}
                   />
                   <Form.Field
-                    name="area"
+                    name="areas"
                     control={Select}
                     options={areas}
                     label={{
@@ -61,7 +60,7 @@ class CreateEventComponent extends Component<Props, State> {
                     placeholder="Selecciona un area..."
                     search
                     searchInput={{ id: 'form-select-control-area' }}
-                    value={event.area}
+                    value={event.areas}
                     onChange={this.handleChangeEvent}
                   />
                   <Form.Group unstackable widths={3}>
@@ -96,15 +95,14 @@ class CreateEventComponent extends Component<Props, State> {
                     value={event.max_capacity}
                     onChange={this.handleChangeEvent}
                   />
-                  <input
-                    type="file"
-                    name=""
-                    id=""
-                    onChange={this.handleselectedFile}
-                  />
                   <Form.Field>
                     <label>Poster</label>
-                    <Button>Cargar</Button>
+                    <input
+                      type="file"
+                      name=""
+                      id=""
+                      onChange={this.handleselectedFile}
+                    />
                   </Form.Field>
                   <Form.Input
                     name="tags"
@@ -133,10 +131,6 @@ class CreateEventComponent extends Component<Props, State> {
   };
 
   async createEvent() {
-    const { selectedFile } = this.state;
-    const file = new Blob([selectedFile]);
-
-    const formData = new FormData();
     var newPlace = {
       ...this.state.place,
       floor: +this.state.place.floor,
@@ -149,15 +143,17 @@ class CreateEventComponent extends Component<Props, State> {
       place_id: placeResponse.id,
       time: '2018-11-16T17:13:46.446Z',
     };
-    formData.append('event[poster]', file);
     const newEvent = await httpPost(`events`, event);
     const newReservation = await httpPost(`reservations`, {
       approval: true,
       event_id: newEvent.id,
     });
+    const { selectedFile } = this.state;
+    const file = new Blob([selectedFile]);
+    const formData = new FormData();
+    formData.append('event[poster]', file);
     const resp = await httpPut(`events/${newEvent.id}`, formData, config);
-    console.log(newEvent);
-    console.log(newReservation);
+    this.props.history.push('/events');
   }
 
   handleChangePlace = (e, { name, value }) => {
@@ -165,7 +161,6 @@ class CreateEventComponent extends Component<Props, State> {
   };
 
   handleselectedFile = event => {
-    console.log(event.target.files[0]);
     this.setState({
       selectedFile: event.target.files[0],
     });
