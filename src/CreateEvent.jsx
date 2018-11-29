@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Button, Card, Item, Select } from 'semantic-ui-react';
 import { Place } from './models/Place.jsx';
-import { httpPost } from './api/HttpRequests.jsx';
+import { httpPost, httpPut } from './api/HttpRequests.jsx';
 
 /* ================================ CONFIGURATION ================================ */
 type Props = {};
@@ -21,6 +21,8 @@ class CreateEventComponent extends Component<Props, State> {
   state = {
     event: {},
     place: {},
+    selectedFile: null,
+    loaded: 0,
   };
 
   /* ================================ RENDER ================================ */
@@ -94,6 +96,12 @@ class CreateEventComponent extends Component<Props, State> {
                     value={event.max_capacity}
                     onChange={this.handleChangeEvent}
                   />
+                  <input
+                    type="file"
+                    name=""
+                    id=""
+                    onChange={this.handleselectedFile}
+                  />
                   <Form.Field>
                     <label>Poster</label>
                     <Button>Cargar</Button>
@@ -125,27 +133,42 @@ class CreateEventComponent extends Component<Props, State> {
   };
 
   async createEvent() {
+    const { selectedFile } = this.state;
+    const file = new Blob([selectedFile]);
+
+    const formData = new FormData();
     var newPlace = {
       ...this.state.place,
       floor: +this.state.place.floor,
       max_capacity: 40,
     };
     var placeResponse = await httpPost(`places`, newPlace);
+    const config = { 'content-type': 'multipart/form-data' };
     var event = {
       ...this.state.event,
       place_id: placeResponse.id,
       time: '2018-11-16T17:13:46.446Z',
     };
+    formData.append('event[poster]', file);
     const newEvent = await httpPost(`events`, event);
     const newReservation = await httpPost(`reservations`, {
       approval: true,
       event_id: newEvent.id,
     });
+    const resp = await httpPut(`events/${newEvent.id}`, formData, config);
+    console.log(newEvent);
     console.log(newReservation);
   }
 
   handleChangePlace = (e, { name, value }) => {
     this.setState({ place: { ...this.state.place, [name]: value } });
+  };
+
+  handleselectedFile = event => {
+    console.log(event.target.files[0]);
+    this.setState({
+      selectedFile: event.target.files[0],
+    });
   };
 }
 

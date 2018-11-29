@@ -17,18 +17,20 @@ const httpGet = async (endpoint, params, requiresAuth = true) => {
       withCredentials: false,
     });
     return response.data;
-
   } catch (error) {
     console.log(error);
     return null;
   }
 };
 
-const httpPost = async (endpoint, data, requiresAuth = true) => {
+const httpPost = async (
+  endpoint,
+  data,
+  requiresAuth = true,
+  extraHeaders = {},
+) => {
   try {
-    const headers = {
-      Accept: 'application/json',
-    };
+    const headers = { Accept: 'application/json', ...extraHeaders };
     if (requiresAuth) {
       const cookies = new Cookies();
       const auth_token = cookies.get('access_token');
@@ -46,11 +48,14 @@ const httpPost = async (endpoint, data, requiresAuth = true) => {
   }
 };
 
-const httpPut = async (endpoint, data, requiresAuth = true) => {
+const httpPut = async (
+  endpoint,
+  data,
+  requiresAuth = true,
+  extraHeaders = {},
+) => {
   try {
-    const headers = {
-      Accept: 'application/json',
-    };
+    const headers = { Accept: 'application/json', ...extraHeaders };
     if (requiresAuth) {
       const cookies = new Cookies();
       const auth_token = cookies.get('access_token');

@@ -44,7 +44,7 @@ export default class EventComponent extends Component<Props, State> {
                 <GridRow>
                   <Grid.Column width={8}>
                     <Image
-                      src={event.poster}
+                      src={event.poster.url}
                       size={isExpanded ? 'large' : 'small'}
                     />
                   </Grid.Column>
