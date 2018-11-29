@@ -111,7 +111,6 @@ class ProfileComponent extends Component<Props, State> {
                           />
                         )}
                         {!edit ? <Button type="submit">Cambiar</Button> : null}
->>>>>>> 6efc24649862294980eea05071d8adfb34398f6d
                       </Form>
                     </Item.Content>
                   </Item>
@@ -142,7 +141,6 @@ class ProfileComponent extends Component<Props, State> {
       const employee = employees.find(x => x.email === email);
       this.setState({ user: employee, isStudent: false });
     }
->>>>>>> 6efc24649862294980eea05071d8adfb34398f6d
   }
 
   changeEdit = () => {

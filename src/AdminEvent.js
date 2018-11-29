@@ -18,6 +18,8 @@ import {
   DateInput,
   SimpleForm,
   DisabledInput,
+  ImageField,
+  ImageInput,
 } from 'react-admin';
 
 
@@ -34,17 +36,18 @@ export const EventList = props => (
       <ReferenceField source="place_id" reference="places">
         <TextField source="building" />
       </ReferenceField>
-      <TextField source="poster.url" />
+      <ImageField source="poster.url" title="poster" />
       <TextField source="tags" />
       <NumberField source="max_capacity" />
       <NumberField source="price" />
       <TextField source="contact" />
       <TextField source="areas" />
-
       <EditButton />
     </Datagrid>
   </List>
 );
+
+
 
 export const EventEdit = props => (
   <Edit {...props}>
@@ -59,12 +62,23 @@ export const EventEdit = props => (
         <SelectInput optionText="building" />
       </ReferenceInput>
       <LongTextInput source="description" />
-      <TextInput source="poster.url" />
+      <ImageInput source="poster"  src="url" label="Poster" accept="image/*">
+      <ImageField source="poster.url" title="poster" />
+      </ImageInput>
       <TextInput source="tags" />
       <NumberInput source="max_capacity" />
       <NumberInput source="price" />
       <TextInput source="contact" />
-      <TextInput source="areas" />
+      <SelectInput label="Areas" source="areas" choices={[
+  { id: 'Tecnologia', name: 'tecnologia' },
+  { id: 'Quimica', name: 'quimica' },
+  { id: 'Ingenieria', name: 'ingenieria' },
+  { id: 'Entretenimiento', name: 'entretenimiento' },
+  { id: 'Psicología', name: 'psicología' },
+  { id: 'Humanidades', name: 'humanidades' },
+  { id: 'Comunicación', name: 'comunicación' },
+  { id: 'Peliculas', name: 'peliculas' },
+]} />
     </SimpleForm>
   </Edit>
 );
@@ -87,7 +101,16 @@ export const EventCreate = props => (
       <NumberInput source="max_capacity" />
       <NumberInput source="price" />
       <TextInput source="contact" />
-      <TextInput source="areas" />
+      <SelectInput label="Areas" source="areas" choices={[
+  { id: 'Tecnologia', name: 'tecnologia' },
+  { id: 'Quimica', name: 'quimica' },
+  { id: 'Ingenieria', name: 'ingenieria' },
+  { id: 'Entretenimiento', name: 'entretenimiento' },
+  { id: 'Psicología', name: 'psicología' },
+  { id: 'Humanidades', name: 'humanidades' },
+  { id: 'Comunicación', name: 'comunicación' },
+  { id: 'Peliculas', name: 'peliculas' },
+]} />
     </SimpleForm>
   </Create>
 );

@@ -14,6 +14,12 @@ type State = {
 var areas = [
   { text: 'Tecnologia', value: 'tecnologia' },
   { text: 'Quimica', value: 'quimica' },
+  { text: 'Ingenieria', value: 'ingenieria' },
+  { text: 'Entretenimiento', value: 'entretenimiento' },
+  { text: 'Psicología', value: 'psicología' },
+  { text: 'Humanidades', value: 'humanidades' },
+  { text: 'Comunicación', value: 'comunicación' },
+  { text: 'Peliculas', value: 'peliculas' },
 ];
 
 class CreateEventComponent extends Component<Props, State> {
