@@ -16,6 +16,7 @@ import { Event } from './models/Event.jsx';
 import { dummyEvents } from './utils/DummyData.jsx';
 import DatePicker from './components/DatePicker.jsx';
 import { handleChange } from './utils/StateUtil.jsx';
+import { addItemState, removeItemState } from './utils/StateUtil.jsx';
 
 /* ================================ CONFIGURATION ================================ */
 type Props = {};
@@ -29,11 +30,12 @@ class EventsComponent extends Component<Props, State> {
     events: [],
     date: '',
     search: '',
+    selectedCategories: [],
   };
 
   /* ================================ RENDER ================================ */
   render() {
-    const { events, date, search } = this.state;
+    const { events, date, search, selectedCategories } = this.state;
     return (
       <div style={eventsContainerStyles}>
         <Grid divided="vertically" style={{ marginTop: '45px' }}>
@@ -97,7 +99,10 @@ class EventsComponent extends Component<Props, State> {
                 style={{ width: '100%', margin: 'auto 20px' }}
               >
                 <Sticky offset={150}>
-                  <CategoriesComponent />
+                  <CategoriesComponent
+                    selectedCategories={selectedCategories}
+                    selectCategory={this.selectCategory}
+                  />
                 </Sticky>
               </Rail>
             </Grid.Column>
@@ -126,9 +131,19 @@ class EventsComponent extends Component<Props, State> {
       const event = await httpGet(`events/${reservation.event.id}`);
       events.push(event);
     }
-    events = events.filter(
-      x => x.name && x.name.toLowerCase().includes(search.toLowerCase()),
-    );
+    if (search) {
+      events =
+        events.filter(
+          x => !x.name || x.name.toLowerCase().includes(search.toLowerCase()),
+        ) || [];
+    }
+    events =
+      events.filter(
+        x =>
+          !x.areas ||
+          (this.state.selectedCategories &&
+            x.areas.includes(this.state.selectedCategories)),
+      ) || [];
     this.setState({
       events: events,
     });
@@ -137,6 +152,18 @@ class EventsComponent extends Component<Props, State> {
   handleChangeSearch = async (e, data) => {
     this.setState({ search: e.target.value });
     this.getEvents(e.target.value);
+  };
+
+  selectCategory = category => {
+    if (this.isSelected(category)) {
+      removeItemState(this)('selectedCategories', category);
+    } else {
+      addItemState(this)('selectedCategories', category);
+    }
+    this.getEvents();
+  };
+  isSelected = category => {
+    return this.state.selectedCategories.includes(category);
   };
 }
 

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { List, Card, Header } from 'semantic-ui-react';
-import { addItemState, removeItemState } from './utils/StateUtil.jsx';
 
 /* ================================ CONFIGURATION ================================ */
 var categories = [
@@ -24,7 +23,6 @@ var categories = [
 class CategoriesComponent extends Component {
   /* ================================ DECLARATIONS ================================ */
   state = {
-    selectedCategories: [],
     categories: categories,
   };
 
@@ -55,7 +53,7 @@ class CategoriesComponent extends Component {
           <List.Item
             key={category.name}
             style={selectCategoryClass(category)}
-            onClick={() => this.selectCategory(category)}
+            onClick={() => this.props.selectCategory(category)}
           >
             <Header as="h4" image={category.image} content={category.name} />
           </List.Item>
@@ -65,16 +63,8 @@ class CategoriesComponent extends Component {
   };
 
   /* ================================ LOGIC ================================ */
-  selectCategory = category => {
-    if (this.isSelected(category)) {
-      removeItemState(this)('selectedCategories', category);
-    } else {
-      addItemState(this)('selectedCategories', category);
-    }
-  };
-
   isSelected = category => {
-    return this.state.selectedCategories.includes(category);
+    return this.props.selectedCategories.includes(category);
   };
 }
 
