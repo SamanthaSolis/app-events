@@ -38,12 +38,11 @@ export default class DetailedEvent extends Component<Props, State> {
     return (
       <div style={eventsContainerStyles}>
         <Button
-          as={Link}
           floated="left"
           size="mini"
           circular
           icon="arrow left"
-          to="/events"
+          onClick={() => this.props.history.goBack()}
           style={{ position: 'absolute', margin: '10px' }}
         />
         <Card style={{ width: '90%', float: 'right', margin: '10px' }}>

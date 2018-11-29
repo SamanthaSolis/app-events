@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
-import { Card, Item, Label, Image, GridRow, Grid } from 'semantic-ui-react';
+import {
+  Card,
+  Item,
+  Label,
+  Image,
+  GridRow,
+  Grid,
+  Icon,
+} from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 type Props = {
@@ -12,7 +20,7 @@ export default class EventComponent extends Component<Props, State> {
 
   render() {
     var { isExpanded } = this.state;
-    var { event } = this.props;
+    var { event, showApproval, approval } = this.props;
     var fecha = new Intl.DateTimeFormat('en-GB', {
       year: 'numeric',
       month: 'long',
@@ -26,6 +34,7 @@ export default class EventComponent extends Component<Props, State> {
       <Card
         as={Link}
         to={`/events/${event.id}`}
+        onClick={() => this.props.router.history.pop()}
         style={{ width: '90%', float: 'right', margin: '10px' }}
       >
         <Card.Content>
@@ -83,6 +92,33 @@ export default class EventComponent extends Component<Props, State> {
               </Grid>
             </Item.Content>
           </Item>
+          {showApproval && (
+            <div
+              style={{
+                position: 'absolute',
+                bottom: '10px',
+                right: '10px',
+                display: 'inline',
+              }}
+            >
+              <h4>
+                <Icon
+                  name={
+                    approval === true
+                      ? 'checkmark'
+                      : approval === false
+                      ? 'close'
+                      : 'time'
+                  }
+                />
+                {approval === true
+                  ? 'Aprobado'
+                  : approval === false
+                  ? 'No Aprobado'
+                  : 'Pendiente'}
+              </h4>
+            </div>
+          )}
         </Card.Content>
       </Card>
     );

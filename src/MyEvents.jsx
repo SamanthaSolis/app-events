@@ -22,7 +22,11 @@ class MyEventsComponent extends Component<Props, State> {
     return (
       <div style={eventsContainerStyles}>
         {events.map(event => (
-          <EventComponent event={event} />
+          <EventComponent
+            event={event}
+            showApproval
+            approval={event.approval}
+          />
         ))}
       </div>
     );
@@ -34,8 +38,16 @@ class MyEventsComponent extends Component<Props, State> {
   }
 
   async getEvents() {
-    var events: Event[] = (await httpGet(`events`)) || dummyEvents;
-    this.setState({ events: events });
+    var reservations = (await httpGet(`reservations`)) || [];
+    var events = [];
+    for (let reservation of reservations) {
+      const event = await httpGet(`events/${reservation.event.id}`);
+      event.approval = reservation.approval;
+      events.push(event);
+    }
+    this.setState({
+      events: events,
+    });
   }
 }
 
