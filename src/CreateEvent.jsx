@@ -136,7 +136,12 @@ class CreateEventComponent extends Component<Props, State> {
       place_id: placeResponse.id,
       time: '2018-11-16T17:13:46.446Z',
     };
-    await httpPost(`events`, event);
+    const newEvent = await httpPost(`events`, event);
+    const newReservation = await httpPost(`reservations`, {
+      approval: true,
+      event_id: newEvent.id,
+    });
+    console.log(newReservation);
   }
 
   handleChangePlace = (e, { name, value }) => {
